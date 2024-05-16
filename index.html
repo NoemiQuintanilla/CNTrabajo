@@ -51,12 +51,15 @@
             e.preventDefault();
             await addDoc(collection(db,"pacientes"),{
                 codigo: veterinaria.nombre.value,
-                color: veterinaria.raza.value,
-                edad: veterinaria.codigo.value,
+                color: veterinaria.color.value,
+                edad: veterinaria.edad.value,
                 especie: veterinaria.especie.value,
-                edad: veterinaria.codigo.value,
-                fecha_nacimiento: veterinaria.codigo.value,
-                edad: veterinaria.codigo.value,
+                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                genero: veterinaria.genero.value,
+                nombre: veterinaria.nombre.value,
+                peso: veterinaria.peso.value,
+                propietario: veterinaria.propietario.value,
+                raza: veterinaria.raza.value
             });
             animal.reset();
         });
