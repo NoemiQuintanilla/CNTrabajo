@@ -9,64 +9,16 @@
     <title>Veterinaria</title>
 </head>
 <body>
-    <h1>Gestion de Animales</h1>
-    <hr>
-    <form id="form-veterinaria">
-        <input type="text" id="codigo" placeholder="Ingrese el codigo del Paciente">
-        <input type="text" id="color" placeholder="Ingrese el color del Paciente">
-        <input type="text" id="edad" placeholder="Ingrese la edad del Paciente">
-        <input type="text" id="especie" placeholder="Ingrese la especie del Paciente">
-        <input type="text" id="fecha_nacimiento" placeholder="Ingrese la fecha de nacimiento del Paciente">
-        <input type="text" id="genero" placeholder="Ingrese el genero del Paciente">
-        <input type="text" id="nombre" placeholder="Ingrese el nombre del Paciente">
-        <input type="text" id="peso" placeholder="Ingrese el peso del Paciente">
-        <input type="text" id="propietario" placeholder="Ingrese el propietario del Paciente">
-        <input type="text" id="raza" placeholder="Ingrese la raza del Paciente">
-        <br>
-        <button type="submit" class="btn btn-info">Agregar paciente</button>
-        
-    </form>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
-          authDomain: "veterinaria-144cf.firebaseapp.com",
-          projectId: "veterinaria-144cf",
-          storageBucket: "veterinaria-144cf.appspot.com",
-          messagingSenderId: "895686591577",
-          appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+    <div class="row">
+        <div class="col-md-6">
+            <img src="imagenes/images.png" alt="">
 
-        const db = getFirestore(app);
+        </div>
+        <div class="col-md-6">
 
-        const veterinaria = document.getElementById("form-veterinaria");
-        veterinaria.addEventListener("submit",async(e)=>{
-            e.preventDefault();
-            await addDoc(collection(db,"pacientes"),{
-                codigo: veterinaria.nombre.value,
-                color: veterinaria.color.value,
-                edad: veterinaria.edad.value,
-                especie: veterinaria.especie.value,
-                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
-                genero: veterinaria.genero.value,
-                nombre: veterinaria.nombre.value,
-                peso: veterinaria.peso.value,
-                propietario: veterinaria.propietario.value,
-                raza: veterinaria.raza.value
-            });
-            veterinaria.reset();
-        });
-      </script>
+        </div>
+
+    </div>
 
 
 </body>
