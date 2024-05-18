@@ -191,14 +191,15 @@
             });
         });
         
-       // Función de búsqueda y mostrar datos en los inputs
+        // Función de búsqueda y mostrar datos en los inputs
         const buscar = document.getElementById("buscar");
         const btnBuscar = document.getElementById("btn-buscar");
 
         btnBuscar.addEventListener("click", async () => {
             const codigo = buscar.value.trim();
             if (codigo) {
-                const querySnapshot = await collection(db, "pacientes").where("codigo", "==", codigo).get();
+                const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+                const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
                         const paciente = doc.data();
@@ -220,6 +221,7 @@
                 alert("Por favor, ingrese un código para buscar.");
             }
         });
+       
 
     </script>
 </body>
