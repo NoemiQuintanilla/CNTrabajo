@@ -14,29 +14,47 @@
             
             <br>
             &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href="index.html"><img src="imagenes/utc.png" alt="" class="logo"></a>
+            <center><a href="index.html"><img src="imagenes/utc.png" alt="" class="logo"></a></center>
+            
             <br>
         </div>
 
     </div>
-    <center><h1 class="txt3 alert alert-light">Gestion de Animales</h1></center>
+    <center><h1 class="txt3 alert alert-light">Gestion de Pacientes</h1></center>
     
     <hr>
-    <form id="form-veterinaria">
-        <input type="text" id="codigo" placeholder="Ingrese el codigo del Paciente">
-        <input type="text" id="color" placeholder="Ingrese el color del Paciente">
-        <input type="text" id="edad" placeholder="Ingrese la edad del Paciente">
-        <input type="text" id="especie" placeholder="Ingrese la especie del Paciente">
-        <input type="text" id="fecha_nacimiento" placeholder="Ingrese la fecha de nacimiento del Paciente">
-        <input type="text" id="genero" placeholder="Ingrese el genero del Paciente">
-        <input type="text" id="nombre" placeholder="Ingrese el nombre del Paciente">
-        <input type="text" id="peso" placeholder="Ingrese el peso del Paciente">
-        <input type="text" id="propietario" placeholder="Ingrese el propietario del Paciente">
-        <input type="text" id="raza" placeholder="Ingrese la raza del Paciente">
-        <br>
-        <button type="submit" class="btn btn-info">Agregar paciente</button>
-        
-    </form>
+    <div class="row">
+        <div class="col6">
+            <form id="form-veterinaria">
+
+                <input type="text" id="codigo" placeholder="Ingrese el codigo del Paciente">
+                <br>
+                <input type="text" id="color" placeholder="Ingrese el color del Paciente">
+                <br>
+                <input type="text" id="edad" placeholder="Ingrese la edad del Paciente">
+                <br>
+                <input type="text" id="especie" placeholder="Ingrese la especie del Paciente">
+                <br>
+                <input type="text" id="fecha_nacimiento" placeholder="Ingrese la fecha de nacimiento del Paciente">
+                <br>
+                <input type="text" id="genero" placeholder="Ingrese el genero del Paciente">
+                <br>
+                <input type="text" id="nombre" placeholder="Ingrese el nombre del Paciente">
+                <br>
+                <input type="text" id="peso" placeholder="Ingrese el peso del Paciente">
+                <br>
+                <input type="text" id="propietario" placeholder="Ingrese el propietario del Paciente">
+                <br>
+                <input type="text" id="raza" placeholder="Ingrese la raza del Paciente">
+                <br>
+                <button type="submit" class="btn btn-info">Agregar paciente</button>
+                
+            </form>
+
+        </div>
+
+    </div>
+    
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
