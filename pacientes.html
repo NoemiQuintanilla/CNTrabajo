@@ -126,6 +126,7 @@
             </tbody>
         </table>
     </div>
+    dsfdgfgshh
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -191,14 +192,12 @@
             });
         });
         
-        // Función de búsqueda y mostrar datos en los inputs
-        const buscar = document.getElementById("buscar");
+        // FUNCION DE BUSQUEDA POR CODIGO
         const btnBuscar = document.getElementById("btn-buscar");
-
         btnBuscar.addEventListener("click", async () => {
-            const codigo = buscar.value.trim();
-            if (codigo) {
-                const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const codigoBusqueda = document.getElementById("buscar").value;
+            if (codigoBusqueda) {
+                const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBusqueda));
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
                     querySnapshot.forEach((doc) => {
