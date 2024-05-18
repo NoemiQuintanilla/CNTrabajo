@@ -100,7 +100,29 @@
                 </div>
 
         </form>  
-        hii
+        <!-- Tabla para mostrar los pacientes -->
+    <div class="container">
+        <h2>Lista de Pacientes</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Propietario</th>
+                    <th>Edad</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Color</th>
+                    <th>Especie</th>
+                    <th>Género</th>
+                    <th>Peso</th>
+                    <th>Raza</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-pacientes">
+                <!-- Los datos de los pacientes se insertarán aquí -->
+            </tbody>
+        </table>
+    </div>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -143,6 +165,29 @@
             veterinaria.reset();
         });
 
+         // Escuchar los cambios en la colección de "pacientes" y actualizar la tabla
+         const tablaPacientes = document.getElementById("tabla-pacientes");
+        onSnapshot(collection(db, "pacientes"), (snapshot) => {
+            tablaPacientes.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const paciente = doc.data();
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${paciente.codigo}</td>
+                    <td>${paciente.nombre}</td>
+                    <td>${paciente.propietario}</td>
+                    <td>${paciente.edad}</td>
+                    <td>${paciente.fecha_nacimiento}</td>
+                    <td>${paciente.color}</td>
+                    <td>${paciente.especie}</td>
+                    <td>${paciente.genero}</td>
+                    <td>${paciente.peso}</td>
+                    <td>${paciente.raza}</td>
+                `;
+                tablaPacientes.appendChild(row);
+            });
+        });
+        
        
     </script>
 </body>
