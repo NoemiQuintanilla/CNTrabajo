@@ -144,29 +144,30 @@
         });
 
         //FUNCION DE BUSCAR
-        // Buscar pacientes
-        const buscarInput = document.getElementById("buscar");
-        const btnBuscar = document.getElementById("btn-buscar");
+        document.getElementById("btnBuscar").addEventListener("click", async () => {
+            const codigo = document.getElementById("buscar").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
 
-        btnBuscar.addEventListener("click", async () => {
-            const termino = buscarInput.value.toLowerCase();
-            const querySnapshot = await getDocs(collection(db, "pacientes"));
-            const resultados = querySnapshot.docs.filter(doc => {
-                const data = doc.data();
-                return data.nombre.toLowerCase().includes(termino) || data.codigo.toLowerCase().includes(termino);
-            });
-
-            if (resultados.length > 0) {
-                console.log("Resultados de búsqueda:", resultados);
-                resultados.forEach(doc => {
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    console.log(`${doc.id}: ${JSON.stringify(data)}`);
+                    veterinaria.documentId.value = doc.id;
+                    veterinaria.codigo.value = data.codigo;
+                    veterinaria.edad.value = data.edad;
+                    veterinaria.fecha_nacimiento.value = data.fecha_nacimiento;
+                    veterinaria.nombre.value = data.nombre;
+                    veterinaria.propietario.value = data.propietario;
+                    veterinaria.color.value = data.color;
+                    veterinaria.especie.value = data.especie;
+                    veterinaria.genero.value = data.genero;
+                    veterinaria.peso.value = data.peso;
+                    veterinaria.raza.value = data.raza;
                 });
             } else {
-                console.log("No se encontraron coincidencias.");
+                alert("No se encontró el paciente");
             }
         });
-
     </script>
 </body>
 </html>
