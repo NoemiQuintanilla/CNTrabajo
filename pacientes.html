@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        
+        yaa
         
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -172,7 +172,7 @@
 
         
          // FUNCION DE BUSCAR Y VISUALIZAR
-         const btnBuscar = document.getElementById("btn-buscar");
+        const btnBuscar = document.getElementById("btn-buscar");
         btnBuscar.addEventListener("click", () => {
             const codigoBuscar = document.getElementById("buscar").value;
             const filas = document.querySelectorAll("#tabla-pacientes tr");
@@ -202,7 +202,7 @@
         });
 
          // FUNCION DE EDITAR
-         const btnEditar = document.getElementById("btn-editar");
+        const btnEditar = document.getElementById("btn-editar");
         btnEditar.addEventListener("click", async () => {
             const codigoBuscar = document.getElementById("codigo").value;
             const querySnapshot = await getDocs(collection(db, "pacientes"));
