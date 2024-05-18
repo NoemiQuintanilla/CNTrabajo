@@ -128,7 +128,7 @@
         veterinaria.addEventListener("submit",async(e)=>{
             e.preventDefault();
             await addDoc(collection(db,"pacientes"),{
-                codigo: veterinaria.nombre.value,
+                codigo: veterinaria.codigo.value,
                 color: veterinaria.color.value,
                 edad: veterinaria.edad.value,
                 especie: veterinaria.especie.value,
