@@ -1,9 +1,55 @@
 body {
-    background-image: url(imagenes/fondo.jpg);
+    background-image: url(fondo5.jpg);
     background-size: cover; /* Ajusta la imagen para que cubra todo el fondo */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-position: center; /* Centra la imagen */
     background-attachment: fixed; /* Fija la imagen al fondo */
     margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.logo {
+    width: 150px;
+}
 
+.titulo {
+    color: rgb(0, 0, 0);
+    font-family: cursive;
+    
+}
+.formulario{
+    background-color: #f55ee8;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    border-radius: 20px;
+    width: 50%;
+    height: 150px;
+    padding-top: 45px;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+}
+.formulario:hover{
+   background-color: #ff04f2;
+}
+
+footer {
+    background-color: beige;
+    font-family: cursive;
+    color: black;
+    padding: 10px;
+}
+
+.txt1 {
+    font-family: cursive;
+    font-size: 30px;
+    color: black;
+
+}
+
+.txt2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
 }
