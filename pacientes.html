@@ -89,9 +89,9 @@
                         <br>
                         <button type="submit" class="btn btn-warning">Agregar paciente</button>
                         <hr>
-                        <center><input type="text" name="" id="buscar"></center>
+                        <center><input type="text" name="buscar" id="buscar"></center>
                         <br>
-                        <center> <button type="button" class="btn btn-dark">BUSCAR</button></center>
+                        <center> <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button></center>
                         <hr>
                         <center><button type="button" class="btn btn-success">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
                         
@@ -124,6 +124,7 @@
 
         const db = getFirestore(app);
 
+        //FUNCION DE AGREGAR
         const veterinaria = document.getElementById("form-veterinaria");
         veterinaria.addEventListener("submit",async(e)=>{
             e.preventDefault();
@@ -141,6 +142,36 @@
             });
             veterinaria.reset();
         });
+
+        //FUNCION DE BUSCAR
+        // Buscar pacientes
+const buscarInput = document.getElementById("buscar");
+const btnBuscar = document.getElementById("btn-buscar");
+
+btnBuscar.addEventListener("click", async () => {
+    const termino = buscarInput.value.toLowerCase();
+    const querySnapshot = await getDocs(collection(db, "pacientes"));
+    const resultados = querySnapshot.docs.filter(doc => {
+        const data = doc.data();
+        return data.nombre.toLowerCase().includes(termino) || data.codigo.toLowerCase().includes(termino);
+    });
+
+    if (resultados.length > 0) {
+        console.log("Resultados de búsqueda:", resultados);
+        resultados.forEach(doc => {
+            const data = doc.data();
+            console.log(`${doc.id}: ${JSON.stringify(data)}`);
+        });
+    } else {
+        console.log("No se encontraron coincidencias.");
+    }
+});
+
+
+
+
+
+
     </script>
 
 
