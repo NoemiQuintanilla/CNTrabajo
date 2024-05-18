@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        yaa
+        holi ya
         
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -171,7 +171,7 @@
         });
 
         
-         // FUNCION DE BUSCAR Y VISUALIZAR
+        // FUNCION DE BUSCAR Y VISUALIZAR
         const btnBuscar = document.getElementById("btn-buscar");
         btnBuscar.addEventListener("click", () => {
             const codigoBuscar = document.getElementById("buscar").value;
@@ -201,28 +201,8 @@
             }
         });
 
-         // FUNCION DE EDITAR
-        const btnEditar = document.getElementById("btn-editar");
-        btnEditar.addEventListener("click", async () => {
-            const codigoBuscar = document.getElementById("codigo").value;
-            const querySnapshot = await getDocs(collection(db, "pacientes"));
-            querySnapshot.forEach((doc) => {
-                const paciente = doc.data();
-                if (paciente.codigo === codigoBuscar) {
-                    document.getElementById("codigo").value = paciente.codigo;
-                    document.getElementById("nombre").value = paciente.nombre;
-                    document.getElementById("propietario").value = paciente.propietario;
-                    document.getElementById("edad").value = paciente.edad;
-                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
-                    document.getElementById("color").value = paciente.color;
-                    document.getElementById("especie").value = paciente.especie;
-                    document.getElementById("genero").value = paciente.genero;
-                    document.getElementById("peso").value = paciente.peso;
-                    document.getElementById("raza").value = paciente.raza;
-                    editDocId = doc.id; // Establecer el ID del documento para editar
-                }
-            });
-        });
+
+
         // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
         onSnapshot(collection(db, "pacientes"), (snapshot) => {
