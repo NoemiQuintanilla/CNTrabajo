@@ -23,37 +23,84 @@
     <center><h1 class="txt3 alert alert-light">Gestion de Pacientes</h1></center>
     
     <hr>
-    <div class="row">
-        <div class="col6">
+    
+    
             <form id="form-veterinaria">
+                <div class="row">
+                    <div class="col-md-4">
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Codigo: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="text" id="codigo"  class="alert alert-warning" placeholder="001">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Edad: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="text" id="edad" class="alert alert-warning" placeholder="2">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                        <label for="">Fecha de nacimiento: </label>
+                        &nbsp;
+                        <input type="date" id="fecha_nacimiento" class="alert alert-warning" >
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Nombre: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; 
+                        <input type="text" id="nombre" class="alert alert-warning" placeholder="Firulais" >
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Propietario: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; 
+                        <input type="text" id="propietario" class="alert alert-warning" placeholder="Maria Perez">
+                            
+                    </div>
+                    <div class="col-md-4">
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Color: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;
+                        <input type="text" id="color" class="alert alert-warning" placeholder="Blanco">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Especie: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                        <input type="text" id="especie" class="alert alert-warning" placeholder="Perro">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Genéro: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <select name="" id="" class="alert alert-warning">
+                            <option value="">-- Seleccione --</option>
+                            <option value="">Macho</option>
+                            <option value="">Hembra</option>
+                        </select>
+                        
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Peso: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; 
+                        <input type="text" id="peso" class="alert alert-warning" placeholder="30.5">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <label for="">Raza: </label>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;
+                        <input type="text" id="raza" class="alert alert-warning" placeholder="Raza del Paciente">
+                    </div>
+                    <div class="col-md-4">
+                        <br>
+                        <br>
+                        <button type="submit" class="btn btn-info">Agregar paciente</button>
+                        <hr>
+                        <center><input type="text" name="" id="buscar"></center>
+                        <br>
+                        <center> <button type="button" class="btn btn-dark">BUSCAR</button></center>
+                        <hr>
+                        <center><button type="button" class="btn btn-success">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
+                        
+                    </div>             
 
-                <input type="text" id="codigo" placeholder="Ingrese el codigo del Paciente">
-                <br>
-                <input type="text" id="color" placeholder="Ingrese el color del Paciente">
-                <br>
-                <input type="text" id="edad" placeholder="Ingrese la edad del Paciente">
-                <br>
-                <input type="text" id="especie" placeholder="Ingrese la especie del Paciente">
-                <br>
-                <input type="text" id="fecha_nacimiento" placeholder="Ingrese la fecha de nacimiento del Paciente">
-                <br>
-                <input type="text" id="genero" placeholder="Ingrese el genero del Paciente">
-                <br>
-                <input type="text" id="nombre" placeholder="Ingrese el nombre del Paciente">
-                <br>
-                <input type="text" id="peso" placeholder="Ingrese el peso del Paciente">
-                <br>
-                <input type="text" id="propietario" placeholder="Ingrese el propietario del Paciente">
-                <br>
-                <input type="text" id="raza" placeholder="Ingrese la raza del Paciente">
-                <br>
-                <button type="submit" class="btn btn-info">Agregar paciente</button>
-                
-            </form>
+                </div>
 
-        </div>
-
-    </div>
+            </form>  
     
     <script type="module">
         // Import the functions you need from the SDKs you need
