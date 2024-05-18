@@ -170,27 +170,27 @@
         });
 
         
-// FUNCION DE BUSCAR
-const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", async () => {
-            const codigoBuscar = document.getElementById("buscar").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
-            const querySnapshot = await getDocs(q);
+        // FUNCION DE BUSCAR
+        const btnBuscar = document.getElementById("btn-buscar");
+                btnBuscar.addEventListener("click", async () => {
+                    const codigoBuscar = document.getElementById("buscar").value;
+                    const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+                    const querySnapshot = await getDocs(q);
 
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                document.getElementById("codigo").value = data.codigo;
-                document.getElementById("color").value = data.color;
-                document.getElementById("edad").value = data.edad;
-                document.getElementById("especie").value = data.especie;
-                document.getElementById("fecha_nacimiento").value = data.fecha_nacimiento;
-                document.getElementById("genero").value = data.genero;
-                document.getElementById("nombre").value = data.nombre;
-                document.getElementById("peso").value = data.peso;
-                document.getElementById("propietario").value = data.propietario;
-                document.getElementById("raza").value = data.raza;
-            });
-        });
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        document.getElementById("codigo").value = data.codigo;
+                        document.getElementById("color").value = data.color;
+                        document.getElementById("edad").value = data.edad;
+                        document.getElementById("especie").value = data.especie;
+                        document.getElementById("fecha_nacimiento").value = data.fecha_nacimiento;
+                        document.getElementById("genero").value = data.genero;
+                        document.getElementById("nombre").value = data.nombre;
+                        document.getElementById("peso").value = data.peso;
+                        document.getElementById("propietario").value = data.propietario;
+                        document.getElementById("raza").value = data.raza;
+                    });
+                });
 
         // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
