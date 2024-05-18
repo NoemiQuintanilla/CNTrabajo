@@ -169,58 +169,53 @@
             veterinaria.reset();
         });
 
-         // Visualizar los cambios y actualizar la tabla
+        
+// FUNCION DE BUSCAR
+const btnBuscar = document.getElementById("btn-buscar");
+        btnBuscar.addEventListener("click", async () => {
+            const codigoBuscar = document.getElementById("buscar").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                document.getElementById("codigo").value = data.codigo;
+                document.getElementById("color").value = data.color;
+                document.getElementById("edad").value = data.edad;
+                document.getElementById("especie").value = data.especie;
+                document.getElementById("fecha_nacimiento").value = data.fecha_nacimiento;
+                document.getElementById("genero").value = data.genero;
+                document.getElementById("nombre").value = data.nombre;
+                document.getElementById("peso").value = data.peso;
+                document.getElementById("propietario").value = data.propietario;
+                document.getElementById("raza").value = data.raza;
+            });
+        });
+
+        // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
         onSnapshot(collection(db, "pacientes"), (snapshot) => {
             tablaPacientes.innerHTML = "";
             snapshot.forEach((doc) => {
                 const paciente = doc.data();
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${paciente.codigo}</td>
-                    <td>${paciente.nombre}</td>
-                    <td>${paciente.propietario}</td>
-                    <td>${paciente.edad}</td>
-                    <td>${paciente.fecha_nacimiento}</td>
-                    <td>${paciente.color}</td>
-                    <td>${paciente.especie}</td>
-                    <td>${paciente.genero}</td>
-                    <td>${paciente.peso}</td>
-                    <td>${paciente.raza}</td>
+                tablaPacientes.innerHTML += `
+                    <tr>
+                        <td>${paciente.codigo}</td>
+                        <td>${paciente.nombre}</td>
+                        <td>${paciente.propietario}</td>
+                        <td>${paciente.edad}</td>
+                        <td>${paciente.fecha_nacimiento}</td>
+                        <td>${paciente.color}</td>
+                        <td>${paciente.especie}</td>
+                        <td>${paciente.genero}</td>
+                        <td>${paciente.peso}</td>
+                        <td>${paciente.raza}</td>
+                    </tr>
                 `;
-                tablaPacientes.appendChild(row);
             });
         });
+
         
-        // FUNCION DE BUSQUEDA POR CODIGO
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", async () => {
-            const codigoBusqueda = document.getElementById("buscar").value;
-            if (codigoBusqueda) {
-                const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBusqueda));
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    querySnapshot.forEach((doc) => {
-                        const paciente = doc.data();
-                        veterinaria.codigo.value = paciente.codigo;
-                        veterinaria.color.value = paciente.color;
-                        veterinaria.edad.value = paciente.edad;
-                        veterinaria.especie.value = paciente.especie;
-                        veterinaria.fecha_nacimiento.value = paciente.fecha_nacimiento;
-                        veterinaria.genero.value = paciente.genero;
-                        veterinaria.nombre.value = paciente.nombre;
-                        veterinaria.peso.value = paciente.peso;
-                        veterinaria.propietario.value = paciente.propietario;
-                        veterinaria.raza.value = paciente.raza;
-                    });
-                } else {
-                    alert("No se encontró ningún paciente con ese código.");
-                }
-            } else {
-                alert("Por favor, ingrese un código para buscar.");
-            }
-        });
-       
 
     </script>
 </body>
