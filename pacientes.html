@@ -100,7 +100,7 @@
                 </div>
 
         </form>  
-        hiiaaaa
+        hii
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -125,101 +125,25 @@
         const db = getFirestore(app);
 
         //FUNCION DE AGREGAR
-      
-        const form = document.getElementById("form-veterinaria");
-        form.addEventListener("submit", async (e) => {
+        const veterinaria = document.getElementById("form-veterinaria");
+        veterinaria.addEventListener("submit",async(e)=>{
             e.preventDefault();
-            const docId = form.documentId.value;
-            if (docId) {
-                await updateDoc(doc(db, "pacientes", docId), {
-                    codigo: form.codigo.value,
-                    edad: form.edad.value,
-                    fecha_nacimiento: form.fecha_nacimiento.value,
-                    nombre: form.nombre.value,
-                    propietario: form.propietario.value,
-                    color: form.color.value,
-                    especie: form.especie.value,
-                    genero: form.genero.value,
-                    peso: form.peso.value,
-                    raza: form.raza.value
-                });
-                alert("Paciente actualizado");
-            } else {
-                await addDoc(collection(db, "pacientes"), {
-                    codigo: form.codigo.value,
-                    edad: form.edad.value,
-                    fecha_nacimiento: form.fecha_nacimiento.value,
-                    nombre: form.nombre.value,
-                    propietario: form.propietario.value,
-                    color: form.color.value,
-                    especie: form.especie.value,
-                    genero: form.genero.value,
-                    peso: form.peso.value,
-                    raza: form.raza.value
-                });
-                alert("Paciente agregado");
-            }
-            form.reset();
+            await addDoc(collection(db,"pacientes"),{
+                codigo: veterinaria.codigo.value,
+                color: veterinaria.color.value,
+                edad: veterinaria.edad.value,
+                especie: veterinaria.especie.value,
+                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                genero: veterinaria.genero.value,
+                nombre: veterinaria.nombre.value,
+                peso: veterinaria.peso.value,
+                propietario: veterinaria.propietario.value,
+                raza: veterinaria.raza.value
+            });
+            veterinaria.reset();
         });
 
-        document.getElementById("btn-buscar").addEventListener("click", async () => {
-            const codigo = document.getElementById("buscar").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    form.documentId.value = doc.id;
-                    form.codigo.value = data.codigo;
-                    form.edad.value = data.edad;
-                    form.fecha_nacimiento.value = data.fecha_nacimiento;
-                    form.nombre.value = data.nombre;
-                    form.propietario.value = data.propietario;
-                    form.color.value = data.color;
-                    form.especie.value = data.especie;
-                    form.genero.value = data.genero;
-                    form.peso.value = data.peso;
-                    form.raza.value = data.raza;
-                });
-            } else {
-                alert("No se encontró el paciente");
-            }
-        });
-
-        document.getElementById("btnEliminar").addEventListener("click", async () => {
-            const docId = form.documentId.value;
-            if (docId) {
-                await deleteDoc(doc(db, "pacientes", docId));
-                alert("Paciente eliminado");
-                form.reset();
-            } else {
-                alert("Primero busca un paciente para eliminar");
-            }
-        });
-
-        document.getElementById("btnEditar").addEventListener("click", async () => {
-            const docId = form.documentId.value;
-            if (docId) {
-                await updateDoc(doc(db, "pacientes", docId), {
-                    codigo: form.codigo.value,
-                    edad: form.edad.value,
-                    fecha_nacimiento: form.fecha_nacimiento.value,
-                    nombre: form.nombre.value,
-                    propietario: form.propietario.value,
-                    color: form.color.value,
-                    especie: form.especie.value,
-                    genero: form.genero.value,
-                    peso: form.peso.value,
-                    raza: form.raza.value
-                });
-                alert("Paciente actualizado");
-                form.reset();
-            } else {
-                alert("Primero busca un paciente para editar");
-            }
-        });
-   
+       
     </script>
 </body>
 </html>
