@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-       
+       holi
   
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -191,25 +191,37 @@
                 `;
             });
         });
+
+        ///FUNCION BUSCAR
         const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", async () => {
+        btnBuscar.addEventListener("click", () => {
             const codigo = document.getElementById("buscar").value;
-            const querySnapshot = await getDocs(query(collection(db, "pacientes"), where("codigo", "==", codigo)));
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                    const paciente = doc.data();
-                    document.getElementById("codigo").value = paciente.codigo;
-                    document.getElementById("edad").value = paciente.edad;
-                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
-                    document.getElementById("nombre").value = paciente.nombre;
-                    document.getElementById("propietario").value = paciente.propietario;
-                    document.getElementById("color").value = paciente.color;
-                    document.getElementById("especie").value = paciente.especie;
-                    document.getElementById("genero").value = paciente.genero;
-                    document.getElementById("peso").value = paciente.peso;
-                    document.getElementById("raza").value = paciente.raza;
-                });
-            } else {
+            const tablaPacientes = document.getElementById("tabla-pacientes");
+            const rows = tablaPacientes.getElementsByTagName("tr");
+            let pacienteEncontrado = false;
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const codigoPaciente = cells[0].innerText;
+
+                if (codigoPaciente === codigo) {
+                    document.getElementById("codigo").value = cells[0].innerText;
+                    document.getElementById("nombre").value = cells[1].innerText;
+                    document.getElementById("propietario").value = cells[2].innerText;
+                    document.getElementById("edad").value = cells[3].innerText;
+                    document.getElementById("fecha_nacimiento").value = cells[4].innerText;
+                    document.getElementById("color").value = cells[5].innerText;
+                    document.getElementById("especie").value = cells[6].innerText;
+                    document.getElementById("genero").value = cells[7].innerText;
+                    document.getElementById("peso").value = cells[8].innerText;
+                    document.getElementById("raza").value = cells[9].innerText;
+
+                    pacienteEncontrado = true;
+                    break;
+                }
+            }
+
+            if (!pacienteEncontrado) {
                 alert("No se encontró ningún paciente con ese código.");
             }
         });
