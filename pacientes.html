@@ -92,14 +92,17 @@
                             <hr>
                         </center>
                         
-                        <center><button type="button" class="btn btn-warning" id="btn-editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
+                        <center><button type="button" class="btn btn-warning" id="btn-editar">EDITAR
+
+                        </button> <button type="button" class="btn btn-danger" id="btn-eliminar">ELIMINAR</button>
+                    </center>
                         
                     </div>             
 
                 </div>
 
         </form>  
-        espero que ya
+        yupiiii
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -244,8 +247,22 @@
                     propietario: document.getElementById("propietario").value,
                     raza: document.getElementById("raza").value
                 });
+                veterinaria.reset();
             });
         });
+
+            //FUNCION ELIMINAR
+        const eliminarBtn = document.getElementById("btn-eliminar");
+        eliminarBtn.addEventListener("click", async () => {
+            const codigo = document.getElementById("codigo").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (docSnap) => {
+                await deleteDoc(doc(db, "pacientes", docSnap.id));
+            });
+            veterinaria.reset();
+        });
+
 
          //FUNCION LIMPIAR PANTALLA
          const btnLimpiar = document.getElementById("btn-limpiar");
