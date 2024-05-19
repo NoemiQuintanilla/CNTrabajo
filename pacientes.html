@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        sdfcvgbnm,sdfghjk
+        sdfcvgbnm
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -216,9 +216,10 @@
 
         
 
-                // Función para editar un paciente
+                        // Añade un listener para el botón "Editar"
             const btnEditar = document.getElementById("editar");
             btnEditar.addEventListener("click", async () => {
+                console.log("Editar botón clickeado"); // Verifica si la función se está ejecutando correctamente
                 const codigoEditar = document.getElementById("codigo").value;
                 const nombre = document.getElementById("nombre").value;
                 const propietario = document.getElementById("propietario").value;
@@ -230,24 +231,33 @@
                 const peso = document.getElementById("peso").value;
                 const raza = document.getElementById("raza").value;
 
-                try {
-                    // Actualiza los datos del paciente en la base de datos
-                    await updateDoc(doc(db, "pacientes", codigoEditar), {
-                        nombre,
-                        propietario,
-                        edad,
-                        fecha_nacimiento: fechaNacimiento,
-                        color,
-                        especie,
-                        genero,
-                        peso,
-                        raza
-                    });
-                    alert("Cambios guardados exitosamente.");
-                } catch (error) {
-                    console.error("Error al guardar cambios:", error);
-                    alert("Ocurrió un error al intentar guardar los cambios.");
-                }
+                console.log("Datos del formulario:", {
+                    codigoEditar,
+                    nombre,
+                    propietario,
+                    edad,
+                    fechaNacimiento,
+                    color,
+                    especie,
+                    genero,
+                    peso,
+                    raza
+                });
+
+                // Actualiza los datos del paciente en la base de datos
+                await updateDoc(doc(db, "pacientes", codigoEditar), {
+                    nombre,
+                    propietario,
+                    edad,
+                    fecha_nacimiento: fechaNacimiento,
+                    color,
+                    especie,
+                    genero,
+                    peso,
+                    raza
+                });
+                console.log("Cambios guardados exitosamente.");
+                alert("Cambios guardados exitosamente.");
             });
 
             // Mostrar pacientes en la tabla
