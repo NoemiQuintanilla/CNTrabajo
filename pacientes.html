@@ -74,7 +74,7 @@
                         <label for=""><b>Peso:</b> </label>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; 
                         <input type="text" id="peso" class="alert alert-warning"                         <br>
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <label for=""><b>Raza:</b> </label>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; 
                         <input type="text" id="raza" class="alert alert-warning" >
@@ -155,13 +155,6 @@
         veterinaria.addEventListener("submit",async(e)=>{
             e.preventDefault();
             const codigo = veterinariaForm.codigo.value;
-        
-            // Verificar si el código ya existe
-            const codigoExistente = await verificarCodigoExistente(codigo);
-            if (codigoExistente) {
-                alert("El código ya existe. Por favor, ingrese un código único.");
-                return;
-            }
             await addDoc(collection(db,"pacientes"),{
                 codigo: veterinaria.codigo.value,
                 color: veterinaria.color.value,
@@ -176,15 +169,6 @@
             });
             veterinaria.reset();
         });
-
-        
-            // Verificar si el código ya existe en la base de datos
-            async function verificarCodigoExistente(codigo) {
-                const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
-                const querySnapshot = await getDocs(q);
-                return !querySnapshot.empty;
-            }
-
 
            // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
