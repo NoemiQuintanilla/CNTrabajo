@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-     
+     no vreo
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -188,24 +188,33 @@
         const btnBuscar = document.getElementById("btn-buscar");
         btnBuscar.addEventListener("click", async () => {
             const codigoBuscar = document.getElementById("buscar").value;
-            const snapshot = await getDocs(query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar)));
-            if (!snapshot.empty) {
-                const paciente = snapshot.docs[0].data();
-                // Llena los campos de edición con los datos del paciente encontrado
-                document.getElementById("codigo").value = paciente.codigo;
-                document.getElementById("nombre").value = paciente.nombre;
-                document.getElementById("propietario").value = paciente.propietario;
-                document.getElementById("edad").value = paciente.edad;
-                document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
-                document.getElementById("color").value = paciente.color;
-                document.getElementById("especie").value = paciente.especie;
-                document.getElementById("genero").value = paciente.genero;
-                document.getElementById("peso").value = paciente.peso;
-                document.getElementById("raza").value = paciente.raza;
-            } else {
-                alert("No se encontró un paciente con ese código.");
+
+            try {
+                const querySnapshot = await getDocs(query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar)));
+
+                if (!querySnapshot.empty) {
+                    const paciente = querySnapshot.docs[0].data();
+                    // Llena los campos de edición con los datos del paciente encontrado
+                    document.getElementById("codigo").value = paciente.codigo;
+                    document.getElementById("nombre").value = paciente.nombre;
+                    document.getElementById("propietario").value = paciente.propietario;
+                    document.getElementById("edad").value = paciente.edad;
+                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
+                    document.getElementById("color").value = paciente.color;
+                    document.getElementById("especie").value = paciente.especie;
+                    document.getElementById("genero").value = paciente.genero;
+                    document.getElementById("peso").value = paciente.peso;
+                    document.getElementById("raza").value = paciente.raza;
+                } else {
+                    alert("No se encontró un paciente con ese código.");
+                }
+            } catch (error) {
+                console.error("Error al buscar paciente:", error);
+                alert("Ocurrió un error al buscar paciente. Por favor, intenta nuevamente.");
             }
         });
+
+        
 
         // Añade un listener para el botón "Editar"
         const btnEditar = document.getElementById("editar");
