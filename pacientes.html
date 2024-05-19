@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        no creo
+        
   
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -191,9 +191,12 @@
                 `;
             });
         });
+        
         // Función de búsqueda
         const btnBuscar = document.getElementById("btn-buscar");
         const inputBuscar = document.getElementById("buscar");
+        const inputsPaciente = document.querySelectorAll("#form-veterinaria input, #form-veterinaria select");
+        
         btnBuscar.addEventListener("click", async () => {
             const codigoBuscar = inputBuscar.value;
             if (codigoBuscar.trim() === "") {
@@ -207,23 +210,11 @@
                 alert("No se encontró ningún paciente con ese código.");
                 inputBuscar.value = "";
             } else {
-                tablaPacientes.innerHTML = "";
                 querySnapshot.forEach((doc) => {
                     const paciente = doc.data();
-                    tablaPacientes.innerHTML += `
-                        <tr>
-                            <td>${paciente.codigo}</td>
-                            <td>${paciente.nombre}</td>
-                            <td>${paciente.propietario}</td>
-                            <td>${paciente.edad}</td>
-                            <td>${paciente.fecha_nacimiento}</td>
-                            <td>${paciente.color}</td>
-                            <td>${paciente.especie}</td>
-                            <td>${paciente.genero}</td>
-                            <td>${paciente.peso}</td>
-                            <td>${paciente.raza}</td>
-                        </tr>
-                    `;
+                    inputsPaciente.forEach((input) => {
+                        input.value = paciente[input.id] || "";
+                    });
                 });
             }
         });
