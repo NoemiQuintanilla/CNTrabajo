@@ -186,31 +186,31 @@
 
         // Añade un listener para el botón "Buscar"
         const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", async () => {
-            const codigoBuscar = document.getElementById("buscar").value;
+        btnBuscar.addEventListener("click", () => {
+            const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
+            const filas = document.querySelectorAll("#tabla-pacientes tr");
 
-            try {
-                const querySnapshot = await getDocs(query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar)));
+            let encontrado = false;
 
-                if (!querySnapshot.empty) {
-                    const paciente = querySnapshot.docs[0].data();
-                    // Llena los campos de edición con los datos del paciente encontrado
-                    document.getElementById("codigo").value = paciente.codigo;
-                    document.getElementById("nombre").value = paciente.nombre;
-                    document.getElementById("propietario").value = paciente.propietario;
-                    document.getElementById("edad").value = paciente.edad;
-                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
-                    document.getElementById("color").value = paciente.color;
-                    document.getElementById("especie").value = paciente.especie;
-                    document.getElementById("genero").value = paciente.genero;
-                    document.getElementById("peso").value = paciente.peso;
-                    document.getElementById("raza").value = paciente.raza;
-                } else {
-                    alert("No se encontró un paciente con ese código.");
+            filas.forEach((fila) => {
+                const celdas = fila.querySelectorAll("td");
+                if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
+                    encontrado = true;
+                    document.getElementById("codigo").value = celdas[0].textContent;
+                    document.getElementById("nombre").value = celdas[1].textContent;
+                    document.getElementById("propietario").value = celdas[2].textContent;
+                    document.getElementById("edad").value = celdas[3].textContent;
+                    document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
+                    document.getElementById("color").value = celdas[5].textContent;
+                    document.getElementById("especie").value = celdas[6].textContent;
+                    document.getElementById("genero").value = celdas[7].textContent;
+                    document.getElementById("peso").value = celdas[8].textContent;
+                    document.getElementById("raza").value = celdas[9].textContent;
                 }
-            } catch (error) {
-                console.error("Error al buscar paciente:", error);
-                alert("Ocurrió un error al buscar paciente. Por favor, intenta nuevamente.");
+            });
+
+            if (!encontrado) {
+                alert("No se encontró un paciente con ese código.");
             }
         });
 
