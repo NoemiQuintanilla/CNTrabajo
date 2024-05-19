@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        fdg
+        sdfcvgbnm,sdfghjk
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -216,62 +216,62 @@
 
         
 
-        // Función para editar un paciente
-    const btnEditar = document.getElementById("editar");
-    btnEditar.addEventListener("click", async () => {
-        const codigoEditar = document.getElementById("codigo").value;
-        const nombre = document.getElementById("nombre").value;
-        const propietario = document.getElementById("propietario").value;
-        const edad = document.getElementById("edad").value;
-        const fechaNacimiento = document.getElementById("fecha_nacimiento").value;
-        const color = document.getElementById("color").value;
-        const especie = document.getElementById("especie").value;
-        const genero = document.getElementById("genero").value;
-        const peso = document.getElementById("peso").value;
-        const raza = document.getElementById("raza").value;
+                // Función para editar un paciente
+            const btnEditar = document.getElementById("editar");
+            btnEditar.addEventListener("click", async () => {
+                const codigoEditar = document.getElementById("codigo").value;
+                const nombre = document.getElementById("nombre").value;
+                const propietario = document.getElementById("propietario").value;
+                const edad = document.getElementById("edad").value;
+                const fechaNacimiento = document.getElementById("fecha_nacimiento").value;
+                const color = document.getElementById("color").value;
+                const especie = document.getElementById("especie").value;
+                const genero = document.getElementById("genero").value;
+                const peso = document.getElementById("peso").value;
+                const raza = document.getElementById("raza").value;
 
-        try {
-            // Actualiza los datos del paciente en la base de datos
-            await updateDoc(doc(db, "pacientes", codigoEditar), {
-                nombre,
-                propietario,
-                edad,
-                fecha_nacimiento: fechaNacimiento,
-                color,
-                especie,
-                genero,
-                peso,
-                raza
+                try {
+                    // Actualiza los datos del paciente en la base de datos
+                    await updateDoc(doc(db, "pacientes", codigoEditar), {
+                        nombre,
+                        propietario,
+                        edad,
+                        fecha_nacimiento: fechaNacimiento,
+                        color,
+                        especie,
+                        genero,
+                        peso,
+                        raza
+                    });
+                    alert("Cambios guardados exitosamente.");
+                } catch (error) {
+                    console.error("Error al guardar cambios:", error);
+                    alert("Ocurrió un error al intentar guardar los cambios.");
+                }
             });
-            alert("Cambios guardados exitosamente.");
-        } catch (error) {
-            console.error("Error al guardar cambios:", error);
-            alert("Ocurrió un error al intentar guardar los cambios.");
-        }
-    });
 
-    // Mostrar pacientes en la tabla
-    onSnapshot(collection(db, "pacientes"), (snapshot) => {
-        const tablaPacientes = document.getElementById("tabla-pacientes");
-        tablaPacientes.innerHTML = "";
-        snapshot.forEach((doc) => {
-            const paciente = doc.data();
-            tablaPacientes.innerHTML += `
-                <tr>
-                    <td>${paciente.codigo}</td>
-                    <td>${paciente.nombre}</td>
-                    <td>${paciente.propietario}</td>
-                    <td>${paciente.edad}</td>
-                    <td>${paciente.fecha_nacimiento}</td>
-                    <td>${paciente.color}</td>
-                    <td>${paciente.especie}</td>
-                    <td>${paciente.genero}</td>
-                    <td>${paciente.peso}</td>
-                    <td>${paciente.raza}</td>
-                </tr>
-            `;
-        });
-    });
+            // Mostrar pacientes en la tabla
+            onSnapshot(collection(db, "pacientes"), (snapshot) => {
+                const tablaPacientes = document.getElementById("tabla-pacientes");
+                tablaPacientes.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const paciente = doc.data();
+                    tablaPacientes.innerHTML += `
+                        <tr>
+                            <td>${paciente.codigo}</td>
+                            <td>${paciente.nombre}</td>
+                            <td>${paciente.propietario}</td>
+                            <td>${paciente.edad}</td>
+                            <td>${paciente.fecha_nacimiento}</td>
+                            <td>${paciente.color}</td>
+                            <td>${paciente.especie}</td>
+                            <td>${paciente.genero}</td>
+                            <td>${paciente.peso}</td>
+                            <td>${paciente.raza}</td>
+                        </tr>
+                    `;
+                });
+            });
     </script>
 
         
