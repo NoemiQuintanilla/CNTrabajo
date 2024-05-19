@@ -76,8 +76,8 @@
                         <input type="text" id="peso" class="alert alert-warning"                         <br>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <label for=""><b>Raza:</b> </label>
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;
-                        <input type="text" id="raza" class="alert alert-warning" l Paciente">
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; 
+                        <input type="text" id="raza" class="alert alert-warning" >
                     </div>
                     <div class="col-md-3">
                         <br>
@@ -99,7 +99,7 @@
                 </div>
 
         </form>  
-       
+        yaaaa
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -127,7 +127,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import {getFirestore,collection,addDoc,onSnapshot,updateDoc,deleteDoc,doc,query, where} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import {getFirestore,collection,addDoc,onSnapshot,updateDoc,deleteDoc,doc,query, where,getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
@@ -222,8 +222,33 @@
             }
         });
         
-        //FUNCION LIMPIAR PANTALLA
-        const btnLimpiar = document.getElementById("btn-limpiar");
+       
+
+         //FUNCION EDITAR
+        const editarBtn = document.getElementById("btn-editar");
+        editarBtn.addEventListener("click", async () => {
+            const codigo = document.getElementById("codigo").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (docSnap) => {
+                const docRef = doc(db, "pacientes", docSnap.id);
+                await updateDoc(docRef, {
+                    codigo: document.getElementById("codigo").value,
+                    color: document.getElementById("color").value,
+                    edad: document.getElementById("edad").value,
+                    especie: document.getElementById("especie").value,
+                    fecha_nacimiento: document.getElementById("fecha_nacimiento").value,
+                    genero: document.getElementById("genero").value,
+                    nombre: document.getElementById("nombre").value,
+                    peso: document.getElementById("peso").value,
+                    propietario: document.getElementById("propietario").value,
+                    raza: document.getElementById("raza").value
+                });
+            });
+        });
+
+         //FUNCION LIMPIAR PANTALLA
+         const btnLimpiar = document.getElementById("btn-limpiar");
         btnLimpiar.addEventListener("click", () => {
             document.getElementById("codigo").value = "";
             document.getElementById("nombre").value = "";
@@ -236,29 +261,6 @@
             document.getElementById("peso").value = "";
             document.getElementById("raza").value = "";
             document.getElementById("buscar").value="";
-        });
-
-         // Editar paciente
-         document.getElementById("btn-editar").addEventListener("click", async () => {
-            const codigo = document.getElementById("codigo").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach(async (docSnap) => {
-                const docRef = doc(db, "pacientes", docSnap.id);
-                await updateDoc(docRef, {
-                    codigo: cells[0].innerText,
-                    nombre: cells[1].innerText,
-                    propietario: cells[2].innerText,
-                    edad: cells[3].innerText,
-                    fecha_nacimiento: cells[4].innerText,
-                    color: cells[5].innerText,
-                    especie: cells[6].innerText,
-                    genero: cells[7].innerText,
-                    peso: cells[8].innerText,
-                    raza: cells[9].innerText
-                });
-                veterinaria.reset();
-            });
         });
 
     </script>
