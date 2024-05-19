@@ -95,17 +95,15 @@
                             <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button><hr>
                         </center>
                         
-                        <center>
-                            <button type="button" class="btn btn-success" id="editar">EDITAR</button> 
-                            <button type="button" class="btn btn-danger">ELIMINAR</button>
-                        </center>
+                        <center><button type="button" class="btn btn-success" id="editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
                         
                     </div>             
 
                 </div>
 
         </form>  
-        
+  
+        yaaa
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -132,127 +130,100 @@
     
     <script type="module">
         // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-            import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc,updateDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-            
-            // TODO: Add SDKs for Firebase products that you want to use
-            // https://firebase.google.com/docs/web/setup#available-libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {getFirestore,collection,addDoc,onSnapshot,updateDoc,deleteDoc,doc,query, where} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         
-            // Your web app's Firebase configuration
-            const firebaseConfig = {
-            apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
-            authDomain: "veterinaria-144cf.firebaseapp.com",
-            projectId: "veterinaria-144cf",
-            storageBucket: "veterinaria-144cf.appspot.com",
-            messagingSenderId: "895686591577",
-            appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
-            };
-        
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
+          authDomain: "veterinaria-144cf.firebaseapp.com",
+          projectId: "veterinaria-144cf",
+          storageBucket: "veterinaria-144cf.appspot.com",
+          messagingSenderId: "895686591577",
+          appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
 
-            const db = getFirestore(app);
+        const db = getFirestore(app);
 
-            const formVeterinaria = document.getElementById("form-veterinaria");
-            formVeterinaria.addEventListener("submit", async (e) => {
-                e.preventDefault();
-
-                // Recolecta los valores de los campos del formulario
-                const codigo = formVeterinaria.codigo.value;
-                const color = formVeterinaria.color.value;
-                const edad = formVeterinaria.edad.value;
-                const especie = formVeterinaria.especie.value;
-                const fechaNacimiento = formVeterinaria.fecha_nacimiento.value;
-                const genero = formVeterinaria.genero.value;
-                const nombre = formVeterinaria.nombre.value;
-                const peso = formVeterinaria.peso.value;
-                const propietario = formVeterinaria.propietario.value;
-                const raza = formVeterinaria.raza.value;
-
-                // Añade el documento del paciente a la colección 'pacientes'
-                await addDoc(collection(db, "pacientes"), {
-                    codigo,
-                    color,
-                    edad,
-                    especie,
-                    fecha_nacimiento: fechaNacimiento,
-                    genero,
-                    nombre,
-                    peso,
-                    propietario,
-                    raza
-                });
-
-                // Reinicia el formulario después de agregar el paciente
-                formVeterinaria.reset();
+        //FUNCION DE AGREGAR
+        const veterinaria = document.getElementById("form-veterinaria");
+        veterinaria.addEventListener("submit",async(e)=>{
+            e.preventDefault();
+            await addDoc(collection(db,"pacientes"),{
+                codigo: veterinaria.codigo.value,
+                color: veterinaria.color.value,
+                edad: veterinaria.edad.value,
+                especie: veterinaria.especie.value,
+                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                genero: veterinaria.genero.value,
+                nombre: veterinaria.nombre.value,
+                peso: veterinaria.peso.value,
+                propietario: veterinaria.propietario.value,
+                raza: veterinaria.raza.value
             });
+            veterinaria.reset();
+        });
 
-            // Añade un listener para el botón "Buscar"
-            const btnBuscar = document.getElementById("btn-buscar");
-            btnBuscar.addEventListener("click", () => {
-                const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
-                const filas = document.querySelectorAll("#tabla-pacientes tr");
+        const btnBuscar = document.getElementById("btn-buscar");
+        btnBuscar.addEventListener("click", async () => {
+            const codigoBuscar = document.getElementById("buscar").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+            const querySnapshot = await getDocs(q);
 
-                let encontrado = false;
-
-                filas.forEach((fila) => {
-                    const celdas = fila.querySelectorAll("td");
-                    if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
-                        encontrado = true;
-                        document.getElementById("codigo").value = celdas[0].textContent;
-                        document.getElementById("nombre").value = celdas[1].textContent;
-                        document.getElementById("propietario").value = celdas[2].textContent;
-                        document.getElementById("edad").value = celdas[3].textContent;
-                        document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
-                        document.getElementById("color").value = celdas[5].textContent;
-                        document.getElementById("especie").value = celdas[6].textContent;
-                        document.getElementById("genero").value = celdas[7].textContent;
-                        document.getElementById("peso").value = celdas[8].textContent;
-                        document.getElementById("raza").value = celdas[9].textContent;
-                    }
-                });
-
-                if (!encontrado) {
-                    alert("No se encontró un paciente con ese código.");
-                }
-            });
-   
-            
-
-
-                const btnEliminar = document.getElementById("eliminar");
-            btnEliminar.addEventListener("click", async () => {
-                if (currentDocId) {
-                    await deleteDoc(doc(db, "pacientes", currentDocId));
-                    alert("Paciente eliminado correctamente.");
-                    formVeterinaria.reset();
-                    currentDocId = null;
-                } else {
-                    alert("Primero busque un paciente para eliminar.");
-                }
-            });
-            // Mostrar pacientes en la tabla
-            onSnapshot(collection(db, "pacientes"), (snapshot) => {
-                const tablaPacientes = document.getElementById("tabla-pacientes");
-                tablaPacientes.innerHTML = "";
-                snapshot.forEach((doc) => {
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach((doc) => {
                     const paciente = doc.data();
-                    tablaPacientes.innerHTML += `
-                        <tr>
-                            <td>${paciente.codigo}</td>
-                            <td>${paciente.nombre}</td>
-                            <td>${paciente.propietario}</td>
-                            <td>${paciente.edad}</td>
-                            <td>${paciente.fecha_nacimiento}</td>
-                            <td>${paciente.color}</td>
-                            <td>${paciente.especie}</td>
-                            <td>${paciente.genero}</td>
-                            <td>${paciente.peso}</td>
-                            <td>${paciente.raza}</td>
-                        </tr>
-                    `;
+                    currentDocId = doc.id;
+                    document.getElementById("codigo").value = paciente.codigo;
+                    document.getElementById("nombre").value = paciente.nombre;
+                    document.getElementById("propietario").value = paciente.propietario;
+                    document.getElementById("edad").value = paciente.edad;
+                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
+                    document.getElementById("color").value = paciente.color;
+                    document.getElementById("especie").value = paciente.especie;
+                    document.getElementById("genero").value = paciente.genero;
+                    document.getElementById("peso").value = paciente.peso;
+                    document.getElementById("raza").value = paciente.raza;
                 });
-            });   
+            } else {
+                alert("No se encontró un paciente con ese código.");
+            }
+        });
+        
+       
+
+        // Mostrar pacientes en la tabla
+        const tablaPacientes = document.getElementById("tabla-pacientes");
+        onSnapshot(collection(db, "pacientes"), (snapshot) => {
+            tablaPacientes.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const paciente = doc.data();
+                tablaPacientes.innerHTML += `
+                    <tr>
+                        <td>${paciente.codigo}</td>
+                        <td>${paciente.nombre}</td>
+                        <td>${paciente.propietario}</td>
+                        <td>${paciente.edad}</td>
+                        <td>${paciente.fecha_nacimiento}</td>
+                        <td>${paciente.color}</td>
+                        <td>${paciente.especie}</td>
+                        <td>${paciente.genero}</td>
+                        <td>${paciente.peso}</td>
+                        <td>${paciente.raza}</td>
+                    </tr>
+                `;
+            });
+        });
+
+        
+        
+           
 
     </script>
 </body>
