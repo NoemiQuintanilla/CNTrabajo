@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        
+       
   
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -191,73 +191,31 @@
                 `;
             });
         });
-        
-        // Función de búsqueda
         const btnBuscar = document.getElementById("btn-buscar");
-        const inputBuscar = document.getElementById("buscar");
-        const inputsPaciente = document.querySelectorAll("#form-veterinaria input, #form-veterinaria select");
-        
         btnBuscar.addEventListener("click", async () => {
-            const codigoBuscar = inputBuscar.value;
-            if (codigoBuscar.trim() === "") {
-                alert("Por favor, ingrese un código válido.");
-                return;
-            }
-
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
-            const querySnapshot = await getDocs(q);
-            if (querySnapshot.empty) {
-                alert("No se encontró ningún paciente con ese código.");
-                inputBuscar.value = "";
-            } else {
+            const codigo = document.getElementById("buscar").value;
+            const querySnapshot = await getDocs(query(collection(db, "pacientes"), where("codigo", "==", codigo)));
+            if (!querySnapshot.empty) {
                 querySnapshot.forEach((doc) => {
                     const paciente = doc.data();
-                    inputsPaciente.forEach((input) => {
-                        input.value = paciente[input.id] || "";
-                    });
+                    document.getElementById("codigo").value = paciente.codigo;
+                    document.getElementById("edad").value = paciente.edad;
+                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
+                    document.getElementById("nombre").value = paciente.nombre;
+                    document.getElementById("propietario").value = paciente.propietario;
+                    document.getElementById("color").value = paciente.color;
+                    document.getElementById("especie").value = paciente.especie;
+                    document.getElementById("genero").value = paciente.genero;
+                    document.getElementById("peso").value = paciente.peso;
+                    document.getElementById("raza").value = paciente.raza;
                 });
+            } else {
+                alert("No se encontró ningún paciente con ese código.");
             }
         });
+        
 
-        // Función para editar un paciente
-        document.addEventListener("click", (e) => {
-                    if (e.target.classList.contains("btn-editar")) {
-                        const pacienteId = e.target.getAttribute("data-id");
-                        const pacienteRef = doc(db, "pacientes", pacienteId);
-                        getDoc(pacienteRef).then((doc) => {
-                            if (doc.exists()) {
-                                const paciente = doc.data();
-                                formVeterinaria.codigo.value = paciente.codigo;
-                                formVeterinaria.nombre.value = paciente.nombre;
-                                formVeterinaria.propietario.value = paciente.propietario;
-                                formVeterinaria.edad.value = paciente.edad;
-                                formVeterinaria.fecha_nacimiento.value = paciente.fecha_nacimiento;
-                                formVeterinaria.color.value = paciente.color;
-                                formVeterinaria.especie.value = paciente.especie;
-                                formVeterinaria.genero.value = paciente.genero;
-                                formVeterinaria.peso.value = paciente.peso;
-                                formVeterinaria.raza.value = paciente.raza;
-                            } else {
-                                console.log("No such document!");
-                            }
-                        }).catch((error) => {
-                            console.log("Error getting document:", error);
-                        });
-                    }
-                });
-                
-                // Función para eliminar un paciente
-                document.addEventListener("click", (e) => {
-                    if (e.target.classList.contains("btn-eliminar")) {
-                        const pacienteId = e.target.getAttribute("data-id");
-                        const pacienteRef = doc(db, "pacientes", pacienteId);
-                        deleteDoc(pacienteRef).then(() => {
-                            console.log("Paciente eliminado correctamente!");
-                        }).catch((error) => {
-                            console.error("Error al eliminar el paciente: ", error);
-                        });
-                    }
-                });
+        
 
     </script>
 </body>
