@@ -105,7 +105,6 @@
                 </div>
 
         </form>  
-        espero que ya
         
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -155,67 +154,10 @@
             const db = getFirestore(app);
 
             const formVeterinaria = document.getElementById("form-veterinaria");
-        let currentDocId = null;
+            formVeterinaria.addEventListener("submit", async (e) => {
+                e.preventDefault();
 
-        formVeterinaria.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const codigo = formVeterinaria.codigo.value;
-            const color = formVeterinaria.color.value;
-            const edad = formVeterinaria.edad.value;
-            const especie = formVeterinaria.especie.value;
-            const fechaNacimiento = formVeterinaria.fecha_nacimiento.value;
-            const genero = formVeterinaria.genero.value;
-            const nombre = formVeterinaria.nombre.value;
-            const peso = formVeterinaria.peso.value;
-            const propietario = formVeterinaria.propietario.value;
-            const raza = formVeterinaria.raza.value;
-
-            await addDoc(collection(db, "pacientes"), {
-                codigo,
-                color,
-                edad,
-                especie,
-                fecha_nacimiento: fechaNacimiento,
-                genero,
-                nombre,
-                peso,
-                propietario,
-                raza
-            });
-
-            formVeterinaria.reset();
-        });
-
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", async () => {
-            const codigoBuscar = document.getElementById("buscar").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                    const paciente = doc.data();
-                    currentDocId = doc.id;
-                    document.getElementById("codigo").value = paciente.codigo;
-                    document.getElementById("nombre").value = paciente.nombre;
-                    document.getElementById("propietario").value = paciente.propietario;
-                    document.getElementById("edad").value = paciente.edad;
-                    document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
-                    document.getElementById("color").value = paciente.color;
-                    document.getElementById("especie").value = paciente.especie;
-                    document.getElementById("genero").value = paciente.genero;
-                    document.getElementById("peso").value = paciente.peso;
-                    document.getElementById("raza").value = paciente.raza;
-                });
-            } else {
-                alert("No se encontró un paciente con ese código.");
-            }
-        });
-
-        const btnEditar = document.getElementById("editar");
-        btnEditar.addEventListener("click", async () => {
-            if (currentDocId) {
+                // Recolecta los valores de los campos del formulario
                 const codigo = formVeterinaria.codigo.value;
                 const color = formVeterinaria.color.value;
                 const edad = formVeterinaria.edad.value;
@@ -227,7 +169,8 @@
                 const propietario = formVeterinaria.propietario.value;
                 const raza = formVeterinaria.raza.value;
 
-                await updateDoc(doc(db, "pacientes", currentDocId), {
+                // Añade el documento del paciente a la colección 'pacientes'
+                await addDoc(collection(db, "pacientes"), {
                     codigo,
                     color,
                     edad,
@@ -240,45 +183,63 @@
                     raza
                 });
 
-                alert("Datos del paciente actualizados correctamente.");
-            } else {
-                alert("Primero busque un paciente para editar.");
-            }
-        });
-
-        const btnEliminar = document.getElementById("eliminar");
-        btnEliminar.addEventListener("click", async () => {
-            if (currentDocId) {
-                await deleteDoc(doc(db, "pacientes", currentDocId));
-                alert("Paciente eliminado correctamente.");
+                // Reinicia el formulario después de agregar el paciente
                 formVeterinaria.reset();
-                currentDocId = null;
-            } else {
-                alert("Primero busque un paciente para eliminar.");
-            }
-        });
-
-        onSnapshot(collection(db, "pacientes"), (snapshot) => {
-            const tablaPacientes = document.getElementById("tabla-pacientes");
-            tablaPacientes.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const paciente = doc.data();
-                tablaPacientes.innerHTML += `
-                    <tr>
-                        <td>${paciente.codigo}</td>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.propietario}</td>
-                        <td>${paciente.edad}</td>
-                        <td>${paciente.fecha_nacimiento}</td>
-                        <td>${paciente.color}</td>
-                        <td>${paciente.especie}</td>
-                        <td>${paciente.genero}</td>
-                        <td>${paciente.peso}</td>
-                        <td>${paciente.raza}</td>
-                    </tr>
-                `;
             });
-        });
+
+            // Añade un listener para el botón "Buscar"
+            const btnBuscar = document.getElementById("btn-buscar");
+            btnBuscar.addEventListener("click", () => {
+                const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
+                const filas = document.querySelectorAll("#tabla-pacientes tr");
+
+                let encontrado = false;
+
+                filas.forEach((fila) => {
+                    const celdas = fila.querySelectorAll("td");
+                    if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
+                        encontrado = true;
+                        document.getElementById("codigo").value = celdas[0].textContent;
+                        document.getElementById("nombre").value = celdas[1].textContent;
+                        document.getElementById("propietario").value = celdas[2].textContent;
+                        document.getElementById("edad").value = celdas[3].textContent;
+                        document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
+                        document.getElementById("color").value = celdas[5].textContent;
+                        document.getElementById("especie").value = celdas[6].textContent;
+                        document.getElementById("genero").value = celdas[7].textContent;
+                        document.getElementById("peso").value = celdas[8].textContent;
+                        document.getElementById("raza").value = celdas[9].textContent;
+                    }
+                });
+
+                if (!encontrado) {
+                    alert("No se encontró un paciente con ese código.");
+                }
+            });
+   
+        
+            // Mostrar pacientes en la tabla
+            onSnapshot(collection(db, "pacientes"), (snapshot) => {
+                const tablaPacientes = document.getElementById("tabla-pacientes");
+                tablaPacientes.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const paciente = doc.data();
+                    tablaPacientes.innerHTML += `
+                        <tr>
+                            <td>${paciente.codigo}</td>
+                            <td>${paciente.nombre}</td>
+                            <td>${paciente.propietario}</td>
+                            <td>${paciente.edad}</td>
+                            <td>${paciente.fecha_nacimiento}</td>
+                            <td>${paciente.color}</td>
+                            <td>${paciente.especie}</td>
+                            <td>${paciente.genero}</td>
+                            <td>${paciente.peso}</td>
+                            <td>${paciente.raza}</td>
+                        </tr>
+                    `;
+                });
+            });   
 
     </script>
 </body>
