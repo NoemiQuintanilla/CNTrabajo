@@ -99,7 +99,7 @@
                 </div>
 
         </form>  
-       
+       holi
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -222,20 +222,32 @@
             }
         });
         
-        //FUNCION LIMPIAR PANTALLA
-        const btnLimpiar = document.getElementById("btn-limpiar");
-        btnLimpiar.addEventListener("click", () => {
-            document.getElementById("codigo").value = "";
-            document.getElementById("nombre").value = "";
-            document.getElementById("propietario").value = "";
-            document.getElementById("edad").value = "";
-            document.getElementById("fecha_nacimiento").value = "";
-            document.getElementById("color").value = "";
-            document.getElementById("especie").value = "";
-            document.getElementById("genero").value = "";
-            document.getElementById("peso").value = "";
-            document.getElementById("raza").value = "";
-            document.getElementById("buscar").value="";
+        // Editar paciente
+        document.getElementById("btn-editar").addEventListener("click", async () => {
+            const codigo = document.getElementById("codigo").value;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (docSnap) => {
+                const docRef = doc(db, "pacientes", docSnap.id);
+                await updateDoc(docRef, {
+                    codigo: veterinaria.codigo.value,
+                    color: veterinaria.color.value,
+                    edad: veterinaria.edad.value,
+                    especie: veterinaria.especie.value,
+                    fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                    genero: veterinaria.genero.value,
+                    nombre: veterinaria.nombre.value,
+                    peso: veterinaria.peso.value,
+                    propietario: veterinaria.propietario.value,
+                    raza: veterinaria.raza.value
+                });
+                veterinaria.reset();
+            });
+        });
+
+        // Limpiar pantalla
+        document.getElementById("btn-limpiar").addEventListener("click", () => {
+            veterinaria.reset();
         });
 
         
