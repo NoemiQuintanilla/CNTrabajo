@@ -99,7 +99,7 @@
                 </div>
 
         </form>  
-       holi
+       ya
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -164,29 +164,35 @@
                 raza: veterinaria.raza.value
             });
             veterinaria.reset();
+            updateTablaPacientes();
         });
            // Mostrar pacientes en la tabla
-           const tablaPacientes = document.getElementById("tabla-pacientes");
-        onSnapshot(collection(db, "pacientes"), (snapshot) => {
-            tablaPacientes.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const paciente = doc.data();
-                tablaPacientes.innerHTML += `
-                    <tr>
-                        <td>${paciente.codigo}</td>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.propietario}</td>
-                        <td>${paciente.edad}</td>
-                        <td>${paciente.fecha_nacimiento}</td>
-                        <td>${paciente.color}</td>
-                        <td>${paciente.especie}</td>
-                        <td>${paciente.genero}</td>
-                        <td>${paciente.peso}</td>
-                        <td>${paciente.raza}</td>
-                    </tr>
-                `;
+        const tablaPacientes = document.getElementById("tabla-pacientes");
+        const updateTablaPacientes = () => {
+            onSnapshot(collection(db, "pacientes"), (snapshot) => {
+                tablaPacientes.innerHTML = "";
+                snapshot.forEach((doc) => {
+                    const paciente = doc.data();
+                    tablaPacientes.innerHTML += `
+                        <tr>
+                            <td>${paciente.codigo}</td>
+                            <td>${paciente.nombre}</td>
+                            <td>${paciente.propietario}</td>
+                            <td>${paciente.edad}</td>
+                            <td>${paciente.fecha_nacimiento}</td>
+                            <td>${paciente.color}</td>
+                            <td>${paciente.especie}</td>
+                            <td>${paciente.genero}</td>
+                            <td>${paciente.peso}</td>
+                            <td>${paciente.raza}</td>
+                        </tr>
+                    `;
+                });
             });
-        });
+        };
+
+        // Inicializar la tabla de pacientes
+        updateTablaPacientes();
 
         ///FUNCION BUSCAR
         const btnBuscar = document.getElementById("btn-buscar");
@@ -222,7 +228,23 @@
             }
         });
         
-        // Editar paciente
+        //FUNCION LIMPIAR PANTALLA
+        const btnLimpiar = document.getElementById("btn-limpiar");
+        btnLimpiar.addEventListener("click", () => {
+            document.getElementById("codigo").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("propietario").value = "";
+            document.getElementById("edad").value = "";
+            document.getElementById("fecha_nacimiento").value = "";
+            document.getElementById("color").value = "";
+            document.getElementById("especie").value = "";
+            document.getElementById("genero").value = "";
+            document.getElementById("peso").value = "";
+            document.getElementById("raza").value = "";
+            document.getElementById("buscar").value="";
+        });
+
+       // Editar paciente
         document.getElementById("btn-editar").addEventListener("click", async () => {
             const codigo = document.getElementById("codigo").value;
             const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
@@ -242,15 +264,9 @@
                     raza: veterinaria.raza.value
                 });
                 veterinaria.reset();
+                updateTablaPacientes();
             });
         });
-
-        // Limpiar pantalla
-        document.getElementById("btn-limpiar").addEventListener("click", () => {
-            veterinaria.reset();
-        });
-
-        
 
     </script>
 </body>
