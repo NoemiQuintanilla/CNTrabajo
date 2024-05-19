@@ -102,8 +102,7 @@
                 </div>
 
         </form>  
-  
-        
+  ahoira si creo    
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -200,46 +199,37 @@
                 alert("No se encontró un paciente con ese código.");
             }
         });
-
-                    // Agregar evento de editar
+                // Agregar evento de editar
         const btnEditar = document.getElementById("editar");
         btnEditar.addEventListener("click", async () => {
             const codigoEditar = document.getElementById("codigo").value;
-            const filas = document.querySelectorAll("#tabla-pacientes tr");
-
-            filas.forEach((fila) => {
-                const celdas = fila.querySelectorAll("td");
-                if (celdas[0].textContent === codigoEditar) {
-                    document.getElementById("codigo").value = celdas[0].textContent;
-                    document.getElementById("nombre").value = celdas[1].textContent;
-                    document.getElementById("propietario").value = celdas[2].textContent;
-                    document.getElementById("edad").value = celdas[3].textContent;
-                    document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
-                    document.getElementById("color").value = celdas[5].textContent;
-                    document.getElementById("especie").value = celdas[6].textContent;
-                    document.getElementById("genero").value = celdas[7].textContent;
-                    document.getElementById("peso").value = celdas[8].textContent;
-                    document.getElementById("raza").value = celdas[9].textContent;
-                    
-                    // Guardar automáticamente los cambios en la base de datos Firebase
-                    const pacienteRef = doc(db, "pacientes", codigoEditar);
-                    setDoc(pacienteRef, {
-                        codigo: celdas[0].textContent,
-                        nombre: celdas[1].textContent,
-                        propietario: celdas[2].textContent,
-                        edad: celdas[3].textContent,
-                        fecha_nacimiento: celdas[4].textContent,
-                        color: celdas[5].textContent,
-                        especie: celdas[6].textContent,
-                        genero: celdas[7].textContent,
-                        peso: celdas[8].textContent,
-                        raza: celdas[9].textContent
-                    }).then(() => {
-                        console.log("Cambios guardados exitosamente en la base de datos.");
-                    }).catch((error) => {
-                        console.error("Error al guardar cambios:", error);
-                    });
-                }
+            const nombre = document.getElementById("nombre").value;
+            const propietario = document.getElementById("propietario").value;
+            const edad = document.getElementById("edad").value;
+            const fecha_nacimiento = document.getElementById("fecha_nacimiento").value;
+            const color = document.getElementById("color").value;
+            const especie = document.getElementById("especie").value;
+            const genero = document.getElementById("genero").value;
+            const peso = document.getElementById("peso").value;
+            const raza = document.getElementById("raza").value;
+            
+            // Guardar automáticamente los cambios en la base de datos Firebase
+            const pacienteRef = doc(db, "pacientes", codigoEditar);
+            setDoc(pacienteRef, {
+                codigo: codigoEditar,
+                nombre: nombre,
+                propietario: propietario,
+                edad: edad,
+                fecha_nacimiento: fecha_nacimiento,
+                color: color,
+                especie: especie,
+                genero: genero,
+                peso: peso,
+                raza: raza
+            }).then(() => {
+                console.log("Cambios guardados exitosamente en la base de datos.");
+            }).catch((error) => {
+                console.error("Error al guardar cambios:", error);
             });
         });
 
