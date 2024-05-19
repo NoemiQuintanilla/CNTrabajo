@@ -220,34 +220,25 @@
                     document.getElementById("genero").value = celdas[7].textContent;
                     document.getElementById("peso").value = celdas[8].textContent;
                     document.getElementById("raza").value = celdas[9].textContent;
-                    // Cambiar el texto del botón de submit a "Guardar cambios"
-                    document.getElementById("btn-submit").textContent = "Guardar cambios";
+                    
+                     // Guardar automáticamente los cambios en la base de datos Firebase
+                    const pacienteRef = doc(db, "pacientes", codigoEditar);
+                    setDoc(pacienteRef, {
+                        codigo: celdas[0].textContent,
+                        nombre: celdas[1].textContent,
+                        propietario: celdas[2].textContent,
+                        edad: celdas[3].textContent,
+                        fecha_nacimiento: celdas[4].textContent,
+                        color: celdas[5].textContent,
+                        especie: celdas[6].textContent,
+                        genero: celdas[7].textContent,
+                        peso: celdas[8].textContent,
+                        raza: celdas[9].textContent
+                    });
                 }
             });
         });
 
-        // Agregar evento de guardar cambios
-        veterinaria.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if (document.getElementById("btn-submit").textContent === "Guardar cambios") {
-                const codigoEditar = document.getElementById("codigo").value;
-                const pacienteRef = doc(db, "pacientes", codigoEditar);
-                await setDoc(pacienteRef, {
-                    codigo: veterinaria.codigo.value,
-                    color: veterinaria.color.value,
-                    edad: veterinaria.edad.value,
-                    especie: veterinaria.especie.value,
-                    fecha_nacimiento: veterinaria.fecha_nacimiento.value,
-                    genero: veterinaria.genero.value,
-                    nombre: veterinaria.nombre.value,
-                    peso: veterinaria.peso.value,
-                    propietario: veterinaria.propietario.value,
-                    raza: veterinaria.raza.value
-                });
-                veterinaria.reset();
-                document.getElementById("btn-submit").textContent = "Agregar paciente";
-            }
-        });
 
         // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
