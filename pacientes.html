@@ -103,7 +103,7 @@
 
         </form>  
         
-        ya porfis
+        
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -221,7 +221,7 @@
                     document.getElementById("peso").value = celdas[8].textContent;
                     document.getElementById("raza").value = celdas[9].textContent;
                     // Cambiar el texto del botón de submit a "Guardar cambios"
-                    document.getElementById("btn-submit").textContent = "Agregar paciente";
+                    document.getElementById("btn-submit").textContent = "Guardar cambios";
                 }
             });
         });
@@ -229,7 +229,7 @@
         // Agregar evento de guardar cambios
         veterinaria.addEventListener("submit", async (e) => {
             e.preventDefault();
-            if (document.getElementById("btn-submit").textContent === "Agregar paciente") {
+            if (document.getElementById("btn-submit").textContent === "Guardar cambios") {
                 const codigoEditar = document.getElementById("codigo").value;
                 const pacienteRef = doc(db, "pacientes", codigoEditar);
                 await setDoc(pacienteRef, {
