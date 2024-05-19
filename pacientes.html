@@ -92,7 +92,9 @@
                         <center>
                             <input type="text" name="buscar" id="buscar" class="alert alert-warning" placeholder="Ingrese código">
                             <br>
-                            <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button><hr>
+                            <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button>
+                            <button type="button" id="btn-limpiar" class="btn btn-secondary">Limpiar</button> 
+                            <hr>
                         </center>
                         
                         <center><button type="button" class="btn btn-success" onclick="editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
@@ -102,8 +104,7 @@
                 </div>
 
         </form>  
-       holi
-  
+       
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -226,6 +227,20 @@
             }
         });
         
+        //FUNCION LIMPIAR PANTALLA
+        const btnLimpiar = document.getElementById("btn-limpiar");
+        btnLimpiar.addEventListener("click", () => {
+            document.getElementById("codigo").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("propietario").value = "";
+            document.getElementById("edad").value = "";
+            document.getElementById("fecha_nacimiento").value = "";
+            document.getElementById("color").value = "";
+            document.getElementById("especie").value = "";
+            document.getElementById("genero").value = "";
+            document.getElementById("peso").value = "";
+            document.getElementById("raza").value = "";
+        });
 
         
 
