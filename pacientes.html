@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        yaaaaaaaaa
+  
         
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -201,9 +201,9 @@
             }
         });
 
-                // Agregar evento de editar
+                    // Agregar evento de editar
         const btnEditar = document.getElementById("editar");
-        btnEditar.addEventListener("click", () => {
+        btnEditar.addEventListener("click", async () => {
             const codigoEditar = document.getElementById("codigo").value;
             const filas = document.querySelectorAll("#tabla-pacientes tr");
 
@@ -221,7 +221,7 @@
                     document.getElementById("peso").value = celdas[8].textContent;
                     document.getElementById("raza").value = celdas[9].textContent;
                     
-                     // Guardar automáticamente los cambios en la base de datos Firebase
+                    // Guardar automáticamente los cambios en la base de datos Firebase
                     const pacienteRef = doc(db, "pacientes", codigoEditar);
                     setDoc(pacienteRef, {
                         codigo: celdas[0].textContent,
@@ -234,6 +234,10 @@
                         genero: celdas[7].textContent,
                         peso: celdas[8].textContent,
                         raza: celdas[9].textContent
+                    }).then(() => {
+                        console.log("Cambios guardados exitosamente en la base de datos.");
+                    }).catch((error) => {
+                        console.error("Error al guardar cambios:", error);
                     });
                 }
             });
