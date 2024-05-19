@@ -103,7 +103,6 @@
 
         </form>  
   
-        holi
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -226,17 +225,7 @@
             });
         });
 
-        const btnEliminar = document.getElementById("eliminar");
-        btnEliminar.addEventListener("click", async () => {
-            if (currentDocId) {
-                await deleteDoc(doc(db, "pacientes", currentDocId));
-                formVeterinaria.reset();
-                currentDocId = null; // Resetear ID del documento actual
-            } else {
-                alert("No se ha seleccionado un paciente para eliminar.");
-            }
-        });
-
+        
        
 
 
