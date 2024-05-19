@@ -95,7 +95,7 @@
                             <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button><hr>
                         </center>
                         
-                        <center><button type="button" class="btn btn-success" data-id="${doc.id}">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
+                        <center><button type="button" class="btn btn-success" id="editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
                         
                     </div>             
 
@@ -201,9 +201,48 @@
             }
         });
 
-        
+         // Editar paciente
+        const btnsEditar = document.querySelectorAll('editar');
+                btnsEditar.forEach((btn) =>
+                    btn.addEventListener('click', async ({ target: { dataset } }) => {
+                        const docRef = doc(db, "pacientes", dataset.id);
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            const paciente = docSnap.data();
+                            veterinaria.codigo.value = paciente.codigo;
+                            veterinaria.color.value = paciente.color;
+                            veterinaria.edad.value = paciente.edad;
+                            veterinaria.especie.value = paciente.especie;
+                            veterinaria.fecha_nacimiento.value = paciente.fecha_nacimiento;
+                            veterinaria.genero.value = paciente.genero;
+                            veterinaria.nombre.value = paciente.nombre;
+                            veterinaria.peso.value = paciente.peso;
+                            veterinaria.propietario.value = paciente.propietario;
+                            veterinaria.raza.value = paciente.raza;
 
-        // Mostrar pacientes en la tabla
+                            // Guardar los cambios inmediatamente
+                            await updateDoc(docRef, {
+                                codigo: veterinaria.codigo.value,
+                                color: veterinaria.color.value,
+                                edad: veterinaria.edad.value,
+                                especie: veterinaria.especie.value,
+                                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                                genero: veterinaria.genero.value,
+                                nombre: veterinaria.nombre.value,
+                                peso: veterinaria.peso.value,
+                                propietario: veterinaria.propietario.value,
+                                raza: veterinaria.raza.value
+                            });
+
+                            veterinaria.reset();
+                        } else {
+                            console.log("No existe tal documento!");
+                        }
+                    })
+                );
+            
+        
+            // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
         onSnapshot(collection(db, "pacientes"), (snapshot) => {
             tablaPacientes.innerHTML = "";
@@ -225,66 +264,6 @@
                 `;
             });
         });
-
-        // Obtener referencia al botón de editar
-        const btnEditar = document.querySelector(".btn-editar");
-
-        // Escuchar el evento de clic en el botón "Editar"
-        btnEditar.addEventListener("click", async () => {
-            // Obtener los valores de los campos de entrada
-            const codigo = document.getElementById("codigo").value;
-            const nombre = document.getElementById("nombre").value;
-            const propietario = document.getElementById("propietario").value;
-            const edad = document.getElementById("edad").value;
-            const fecha_nacimiento = document.getElementById("fecha_nacimiento").value;
-            const color = document.getElementById("color").value;
-            const especie = document.getElementById("especie").value;
-            const genero = document.getElementById("genero").value;
-            const peso = document.getElementById("peso").value;
-            const raza = document.getElementById("raza").value;
-
-            // Buscar el paciente en Firestore por el código
-            const pacientesRef = collection(db, "pacientes");
-            const querySnapshot = await getDocs(query(pacientesRef, where("codigo", "==", codigo)));
-
-            querySnapshot.forEach(async (doc) => {
-                // Actualizar los datos del paciente con los nuevos valores
-                await updateDoc(doc.ref, {
-                    codigo: codigo,
-                    nombre: nombre,
-                    propietario: propietario,
-                    edad: edad,
-                    fecha_nacimiento: fecha_nacimiento,
-                    color: color,
-                    especie: especie,
-                    genero: genero,
-                    peso: peso,
-                    raza: raza
-                });
-            });
-
-            // Limpiar los campos de entrada después de editar
-            document.getElementById("codigo").value = "";
-            document.getElementById("nombre").value = "";
-            document.getElementById("propietario").value = "";
-            document.getElementById("edad").value = "";
-            document.getElementById("fecha_nacimiento").value = "";
-            document.getElementById("color").value = "";
-            document.getElementById("especie").value = "";
-            document.getElementById("genero").value = "";
-            document.getElementById("peso").value = "";
-            document.getElementById("raza").value = "";
-
-            // Mostrar un mensaje de éxito o recargar la tabla
-            // Puedes implementar esta parte según tu preferencia
-            alert("Paciente actualizado con éxito.");
-            // Opción 1: Recargar la tabla
-            window.location.reload();
-            // Opción 2: Actualizar la tabla manualmente sin recargar la página
-            // Puedes hacerlo llamando a la función que muestra los pacientes en la tabla nuevamente
-            // o actualizando solo la fila correspondiente en la tabla si es necesario
-        });
-                
 
     </script>
 </body>
