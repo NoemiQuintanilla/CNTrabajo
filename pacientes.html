@@ -105,7 +105,7 @@
                 </div>
 
         </form>  
-        
+        yaaaa
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -187,36 +187,37 @@
                 formVeterinaria.reset();
             });
 
-            // Añade un listener para el botón "Buscar"
-            const btnBuscar = document.getElementById("btn-buscar");
-            btnBuscar.addEventListener("click", () => {
-                const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
-                const filas = document.querySelectorAll("#tabla-pacientes tr");
+                const btnBuscar = document.getElementById("btn-buscar");
+                btnBuscar.addEventListener("click", async () => {
+                const codigoBuscar = document.getElementById("buscar").value.trim();
+                if (codigoBuscar === "") {
+                    alert("Ingrese un código para buscar.");
+                    return;
+                }
 
-                let encontrado = false;
+                const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+                const querySnapshot = await getDocs(q);
 
-                filas.forEach((fila) => {
-                    const celdas = fila.querySelectorAll("td");
-                    if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
-                        encontrado = true;
-                        document.getElementById("codigo").value = celdas[0].textContent;
-                        document.getElementById("nombre").value = celdas[1].textContent;
-                        document.getElementById("propietario").value = celdas[2].textContent;
-                        document.getElementById("edad").value = celdas[3].textContent;
-                        document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
-                        document.getElementById("color").value = celdas[5].textContent;
-                        document.getElementById("especie").value = celdas[6].textContent;
-                        document.getElementById("genero").value = celdas[7].textContent;
-                        document.getElementById("peso").value = celdas[8].textContent;
-                        document.getElementById("raza").value = celdas[9].textContent;
-                    }
-                });
-
-                if (!encontrado) {
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        const paciente = doc.data();
+                        currentDocId = doc.id;
+                        document.getElementById("codigo").value = paciente.codigo;
+                        document.getElementById("nombre").value = paciente.nombre;
+                        document.getElementById("propietario").value = paciente.propietario;
+                        document.getElementById("edad").value = paciente.edad;
+                        document.getElementById("fecha_nacimiento").value = paciente.fecha_nacimiento;
+                        document.getElementById("color").value = paciente.color;
+                        document.getElementById("especie").value = paciente.especie;
+                        document.getElementById("genero").value = paciente.genero;
+                        document.getElementById("peso").value = paciente.peso;
+                        document.getElementById("raza").value = paciente.raza;
+                    });
+                } else {
                     alert("No se encontró un paciente con ese código.");
                 }
             });
-   
+    
         
             // Mostrar pacientes en la tabla
             onSnapshot(collection(db, "pacientes"), (snapshot) => {
