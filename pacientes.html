@@ -87,7 +87,7 @@
                     <div class="col-md-3">
                         <br>
                         <br>
-                        <button type="submit" class="btn btn-warning">Agregar paciente</button>
+                        <button type="submit" class="btn btn-warning" id="btn-submit">Agregar paciente</button>
                         <hr>
                         <center>
                             <input type="text" name="buscar" id="buscar" class="alert alert-warning" placeholder="Ingrese código">
@@ -201,9 +201,57 @@
             }
         });
 
-         // Mostrar pacientes en la tabla
+                // Agregar evento de editar
+        const btnEditar = document.getElementById("editar");
+        btnEditar.addEventListener("click", () => {
+            const codigoEditar = document.getElementById("codigo").value;
+            const filas = document.querySelectorAll("#tabla-pacientes tr");
+
+            filas.forEach((fila) => {
+                const celdas = fila.querySelectorAll("td");
+                if (celdas[0].textContent === codigoEditar) {
+                    document.getElementById("codigo").value = celdas[0].textContent;
+                    document.getElementById("nombre").value = celdas[1].textContent;
+                    document.getElementById("propietario").value = celdas[2].textContent;
+                    document.getElementById("edad").value = celdas[3].textContent;
+                    document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
+                    document.getElementById("color").value = celdas[5].textContent;
+                    document.getElementById("especie").value = celdas[6].textContent;
+                    document.getElementById("genero").value = celdas[7].textContent;
+                    document.getElementById("peso").value = celdas[8].textContent;
+                    document.getElementById("raza").value = celdas[9].textContent;
+                    // Cambiar el texto del botón de submit a "Guardar cambios"
+                    document.getElementById("btn-submit").textContent = "Guardar cambios";
+                }
+            });
+        });
+
+        // Agregar evento de guardar cambios
+        veterinaria.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (document.getElementById("btn-submit").textContent === "Guardar cambios") {
+                const codigoEditar = document.getElementById("codigo").value;
+                const pacienteRef = doc(db, "pacientes", codigoEditar);
+                await setDoc(pacienteRef, {
+                    codigo: veterinaria.codigo.value,
+                    color: veterinaria.color.value,
+                    edad: veterinaria.edad.value,
+                    especie: veterinaria.especie.value,
+                    fecha_nacimiento: veterinaria.fecha_nacimiento.value,
+                    genero: veterinaria.genero.value,
+                    nombre: veterinaria.nombre.value,
+                    peso: veterinaria.peso.value,
+                    propietario: veterinaria.propietario.value,
+                    raza: veterinaria.raza.value
+                });
+                veterinaria.reset();
+                document.getElementById("btn-submit").textContent = "Agregar paciente";
+            }
+        });
+
+        // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
-            onSnapshot(collection(db, "pacientes"), (snapshot) => {
+        onSnapshot(collection(db, "pacientes"), (snapshot) => {
             tablaPacientes.innerHTML = "";
             snapshot.forEach((doc) => {
                 const paciente = doc.data();
@@ -224,46 +272,7 @@
             });
         });
 
-         // Editar paciente
-        const btnsEditar = document.querySelectorAll('editar');
-                btnsEditar.forEach((btn) =>
-                    btn.addEventListener('click', async ({ target: { dataset } }) => {
-                        const docRef = doc(db, "pacientes", dataset.id);
-                        const docSnap = await getDoc(docRef);
-                        if (docSnap.exists()) {
-                            const paciente = docSnap.data();
-                            veterinaria.codigo.value = paciente.codigo;
-                            veterinaria.color.value = paciente.color;
-                            veterinaria.edad.value = paciente.edad;
-                            veterinaria.especie.value = paciente.especie;
-                            veterinaria.fecha_nacimiento.value = paciente.fecha_nacimiento;
-                            veterinaria.genero.value = paciente.genero;
-                            veterinaria.nombre.value = paciente.nombre;
-                            veterinaria.peso.value = paciente.peso;
-                            veterinaria.propietario.value = paciente.propietario;
-                            veterinaria.raza.value = paciente.raza;
-
-                            // Guardar los cambios inmediatamente
-                            await updateDoc(docRef, {
-                                codigo: veterinaria.codigo.value,
-                                color: veterinaria.color.value,
-                                edad: veterinaria.edad.value,
-                                especie: veterinaria.especie.value,
-                                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
-                                genero: veterinaria.genero.value,
-                                nombre: veterinaria.nombre.value,
-                                peso: veterinaria.peso.value,
-                                propietario: veterinaria.propietario.value,
-                                raza: veterinaria.raza.value
-                            });
-
-                            veterinaria.reset();
-                        } else {
-                            console.log("No existe tal documento!");
-                        }
-                    })
-                );
-            
+        
         
            
 
