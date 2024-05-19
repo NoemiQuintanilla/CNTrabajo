@@ -99,7 +99,7 @@
                 </div>
 
         </form>  
-       ya
+       ya creo
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -147,11 +147,11 @@
 
         const db = getFirestore(app);
 
-        //FUNCION DE AGREGAR
+        // Agregar paciente
         const veterinaria = document.getElementById("form-veterinaria");
-        veterinaria.addEventListener("submit",async(e)=>{
+        veterinaria.addEventListener("submit", async (e) => {
             e.preventDefault();
-            await addDoc(collection(db,"pacientes"),{
+            await addDoc(collection(db, "pacientes"), {
                 codigo: veterinaria.codigo.value,
                 color: veterinaria.color.value,
                 edad: veterinaria.edad.value,
@@ -166,7 +166,8 @@
             veterinaria.reset();
             updateTablaPacientes();
         });
-           // Mostrar pacientes en la tabla
+
+        // Mostrar pacientes en la tabla
         const tablaPacientes = document.getElementById("tabla-pacientes");
         const updateTablaPacientes = () => {
             onSnapshot(collection(db, "pacientes"), (snapshot) => {
@@ -185,8 +186,19 @@
                             <td>${paciente.genero}</td>
                             <td>${paciente.peso}</td>
                             <td>${paciente.raza}</td>
+                            <td>
+                                <button class="btn btn-primary btn-editar-fila">Editar</button>
+                            </td>
                         </tr>
                     `;
+                });
+
+                // Agregar evento de edición a los botones de editar de cada fila
+                const btnsEditarFila = document.querySelectorAll(".btn-editar-fila");
+                btnsEditarFila.forEach((btn, index) => {
+                    btn.addEventListener("click", () => {
+                        habilitarEdicionFila(index);
+                    });
                 });
             });
         };
@@ -194,9 +206,8 @@
         // Inicializar la tabla de pacientes
         updateTablaPacientes();
 
-        ///FUNCION BUSCAR
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", () => {
+        // Buscar paciente por código
+        document.getElementById("btn-buscar").addEventListener("click", async () => {
             const codigo = document.getElementById("buscar").value;
             const tablaPacientes = document.getElementById("tabla-pacientes");
             const rows = tablaPacientes.getElementsByTagName("tr");
@@ -227,6 +238,51 @@
                 alert("No se encontró ningún paciente con ese código.");
             }
         });
+
+        // Habilitar edición de fila
+        const habilitarEdicionFila = (index) => {
+            const rows = tablaPacientes.getElementsByTagName("tr");
+            const cells = rows[index].getElementsByTagName("td");
+
+            for (let i = 0; i < cells.length - 1; i++) { // -1 para no incluir la columna de acciones
+                cells[i].setAttribute("contenteditable", "true");
+                cells[i].classList.add("editable");
+            }
+
+            const btnGuardar = document.createElement("button");
+            btnGuardar.textContent = "Guardar";
+            btnGuardar.className = "btn btn-success";
+            btnGuardar.addEventListener("click", () => guardarEdicionFila(index));
+            cells[cells.length - 1].appendChild(btnGuardar);
+        };
+
+        // Guardar edición de fila
+        const guardarEdicionFila = async (index) => {
+            const rows = tablaPacientes.getElementsByTagName("tr");
+            const cells = rows[index].getElementsByTagName("td");
+
+            const codigo = cells[0].innerText;
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach(async (docSnap) => {
+                const docRef = doc(db, "pacientes", docSnap.id);
+                await updateDoc(docRef, {
+                    codigo: cells[0].innerText,
+                    nombre: cells[1].innerText,
+                    propietario: cells[2].innerText,
+                    edad: cells[3].innerText,
+                    fecha_nacimiento: cells[4].innerText,
+                    color: cells[5].innerText,
+                    especie: cells[6].innerText,
+                    genero: cells[7].innerText,
+                    peso: cells[8].innerText,
+                    raza: cells[9].innerText
+                });
+                updateTablaPacientes();
+            });
+        };
+
         
         //FUNCION LIMPIAR PANTALLA
         const btnLimpiar = document.getElementById("btn-limpiar");
@@ -244,29 +300,9 @@
             document.getElementById("buscar").value="";
         });
 
-       // Editar paciente
-        document.getElementById("btn-editar").addEventListener("click", async () => {
-            const codigo = document.getElementById("codigo").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach(async (docSnap) => {
-                const docRef = doc(db, "pacientes", docSnap.id);
-                await updateDoc(docRef, {
-                    codigo: veterinaria.codigo.value,
-                    color: veterinaria.color.value,
-                    edad: veterinaria.edad.value,
-                    especie: veterinaria.especie.value,
-                    fecha_nacimiento: veterinaria.fecha_nacimiento.value,
-                    genero: veterinaria.genero.value,
-                    nombre: veterinaria.nombre.value,
-                    peso: veterinaria.peso.value,
-                    propietario: veterinaria.propietario.value,
-                    raza: veterinaria.raza.value
-                });
-                veterinaria.reset();
-                updateTablaPacientes();
-            });
-        });
+        
+
+        
 
     </script>
 </body>
