@@ -103,7 +103,7 @@
 
         </form>  
   
-        yaaa
+        
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -173,7 +173,8 @@
         const btnBuscar = document.getElementById("btn-buscar");
         btnBuscar.addEventListener("click", async () => {
             const codigoBuscar = document.getElementById("buscar").value;
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+            const q = document.querySelectorAll(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+            
             const querySnapshot = await getDocs(q);
 
             if (!querySnapshot.empty) {
