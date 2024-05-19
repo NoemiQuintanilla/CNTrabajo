@@ -95,13 +95,14 @@
                             <button type="button" id="btn-buscar" class="btn btn-dark">BUSCAR</button><hr>
                         </center>
                         
-                        <center><button type="button" class="btn btn-success" id="editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
+                        <center><button type="button" class="btn btn-success" onclick="editar">EDITAR</button> <button type="button" class="btn btn-danger">ELIMINAR</button></center>
                         
                     </div>             
 
                 </div>
 
         </form>  
+        no creo
   
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
@@ -168,40 +169,6 @@
             });
             veterinaria.reset();
         });
-
-        
-     
-
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", () => {
-            const codigoBuscar = document.getElementById("buscar").value.toLowerCase();
-            const filas = document.querySelectorAll("#tabla-pacientes tr");
-
-            let encontrado = false;
-
-            filas.forEach((fila) => {
-                const celdas = fila.querySelectorAll("td");
-                if (celdas[0].textContent.toLowerCase() === codigoBuscar) {
-                    encontrado = true;
-                    currentDocId = fila.getAttribute("data-id"); // Obtener ID del documento
-                    document.getElementById("codigo").value = celdas[0].textContent;
-                    document.getElementById("nombre").value = celdas[1].textContent;
-                    document.getElementById("propietario").value = celdas[2].textContent;
-                    document.getElementById("edad").value = celdas[3].textContent;
-                    document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
-                    document.getElementById("color").value = celdas[5].textContent;
-                    document.getElementById("especie").value = celdas[6].textContent;
-                    document.getElementById("genero").value = celdas[7].textContent;
-                    document.getElementById("peso").value = celdas[8].textContent;
-                    document.getElementById("raza").value = celdas[9].textContent;
-                }
-            });
-
-            if (!encontrado) {
-                alert("No se encontró un paciente con ese código.");
-            }
-        });
-
            // Mostrar pacientes en la tabla
            const tablaPacientes = document.getElementById("tabla-pacientes");
         onSnapshot(collection(db, "pacientes"), (snapshot) => {
@@ -224,14 +191,82 @@
                 `;
             });
         });
+        // Función de búsqueda
+        const btnBuscar = document.getElementById("btn-buscar");
+        const inputBuscar = document.getElementById("buscar");
+        btnBuscar.addEventListener("click", async () => {
+            const codigoBuscar = inputBuscar.value;
+            if (codigoBuscar.trim() === "") {
+                alert("Por favor, ingrese un código válido.");
+                return;
+            }
 
-        
-       
+            const q = query(collection(db, "pacientes"), where("codigo", "==", codigoBuscar));
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty) {
+                alert("No se encontró ningún paciente con ese código.");
+                inputBuscar.value = "";
+            } else {
+                tablaPacientes.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const paciente = doc.data();
+                    tablaPacientes.innerHTML += `
+                        <tr>
+                            <td>${paciente.codigo}</td>
+                            <td>${paciente.nombre}</td>
+                            <td>${paciente.propietario}</td>
+                            <td>${paciente.edad}</td>
+                            <td>${paciente.fecha_nacimiento}</td>
+                            <td>${paciente.color}</td>
+                            <td>${paciente.especie}</td>
+                            <td>${paciente.genero}</td>
+                            <td>${paciente.peso}</td>
+                            <td>${paciente.raza}</td>
+                        </tr>
+                    `;
+                });
+            }
+        });
 
-
-        
-        
-           
+        // Función para editar un paciente
+        document.addEventListener("click", (e) => {
+                    if (e.target.classList.contains("btn-editar")) {
+                        const pacienteId = e.target.getAttribute("data-id");
+                        const pacienteRef = doc(db, "pacientes", pacienteId);
+                        getDoc(pacienteRef).then((doc) => {
+                            if (doc.exists()) {
+                                const paciente = doc.data();
+                                formVeterinaria.codigo.value = paciente.codigo;
+                                formVeterinaria.nombre.value = paciente.nombre;
+                                formVeterinaria.propietario.value = paciente.propietario;
+                                formVeterinaria.edad.value = paciente.edad;
+                                formVeterinaria.fecha_nacimiento.value = paciente.fecha_nacimiento;
+                                formVeterinaria.color.value = paciente.color;
+                                formVeterinaria.especie.value = paciente.especie;
+                                formVeterinaria.genero.value = paciente.genero;
+                                formVeterinaria.peso.value = paciente.peso;
+                                formVeterinaria.raza.value = paciente.raza;
+                            } else {
+                                console.log("No such document!");
+                            }
+                        }).catch((error) => {
+                            console.log("Error getting document:", error);
+                        });
+                    }
+                });
+                
+                // Función para eliminar un paciente
+                document.addEventListener("click", (e) => {
+                    if (e.target.classList.contains("btn-eliminar")) {
+                        const pacienteId = e.target.getAttribute("data-id");
+                        const pacienteRef = doc(db, "pacientes", pacienteId);
+                        deleteDoc(pacienteRef).then(() => {
+                            console.log("Paciente eliminado correctamente!");
+                        }).catch((error) => {
+                            console.error("Error al eliminar el paciente: ", error);
+                        });
+                    }
+                });
 
     </script>
 </body>
