@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        sdfcvgbnm
+        
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -128,98 +128,95 @@
     </div>
     
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+            import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc,updateDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+            
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
         
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
-          authDomain: "veterinaria-144cf.firebaseapp.com",
-          projectId: "veterinaria-144cf",
-          storageBucket: "veterinaria-144cf.appspot.com",
-          messagingSenderId: "895686591577",
-          appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+            apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
+            authDomain: "veterinaria-144cf.firebaseapp.com",
+            projectId: "veterinaria-144cf",
+            storageBucket: "veterinaria-144cf.appspot.com",
+            messagingSenderId: "895686591577",
+            appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
+            };
+        
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
 
-        const db = getFirestore(app);
+            const db = getFirestore(app);
 
-        const formVeterinaria = document.getElementById("form-veterinaria");
-        formVeterinaria.addEventListener("submit", async (e) => {
-            e.preventDefault();
+            const formVeterinaria = document.getElementById("form-veterinaria");
+            formVeterinaria.addEventListener("submit", async (e) => {
+                e.preventDefault();
 
-            // Recolecta los valores de los campos del formulario
-            const codigo = formVeterinaria.codigo.value;
-            const color = formVeterinaria.color.value;
-            const edad = formVeterinaria.edad.value;
-            const especie = formVeterinaria.especie.value;
-            const fechaNacimiento = formVeterinaria.fecha_nacimiento.value;
-            const genero = formVeterinaria.genero.value;
-            const nombre = formVeterinaria.nombre.value;
-            const peso = formVeterinaria.peso.value;
-            const propietario = formVeterinaria.propietario.value;
-            const raza = formVeterinaria.raza.value;
+                // Recolecta los valores de los campos del formulario
+                const codigo = formVeterinaria.codigo.value;
+                const color = formVeterinaria.color.value;
+                const edad = formVeterinaria.edad.value;
+                const especie = formVeterinaria.especie.value;
+                const fechaNacimiento = formVeterinaria.fecha_nacimiento.value;
+                const genero = formVeterinaria.genero.value;
+                const nombre = formVeterinaria.nombre.value;
+                const peso = formVeterinaria.peso.value;
+                const propietario = formVeterinaria.propietario.value;
+                const raza = formVeterinaria.raza.value;
 
-            // Añade el documento del paciente a la colección 'pacientes'
-            await addDoc(collection(db, "pacientes"), {
-                codigo,
-                color,
-                edad,
-                especie,
-                fecha_nacimiento: fechaNacimiento,
-                genero,
-                nombre,
-                peso,
-                propietario,
-                raza
+                // Añade el documento del paciente a la colección 'pacientes'
+                await addDoc(collection(db, "pacientes"), {
+                    codigo,
+                    color,
+                    edad,
+                    especie,
+                    fecha_nacimiento: fechaNacimiento,
+                    genero,
+                    nombre,
+                    peso,
+                    propietario,
+                    raza
+                });
+
+                // Reinicia el formulario después de agregar el paciente
+                formVeterinaria.reset();
             });
 
-            // Reinicia el formulario después de agregar el paciente
-            formVeterinaria.reset();
-        });
+            // Añade un listener para el botón "Buscar"
+            const btnBuscar = document.getElementById("btn-buscar");
+            btnBuscar.addEventListener("click", () => {
+                const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
+                const filas = document.querySelectorAll("#tabla-pacientes tr");
 
-        // Añade un listener para el botón "Buscar"
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", () => {
-            const codigoBuscar = document.getElementById("buscar").value.toLowerCase(); // Convertir a minúsculas
-            const filas = document.querySelectorAll("#tabla-pacientes tr");
+                let encontrado = false;
 
-            let encontrado = false;
+                filas.forEach((fila) => {
+                    const celdas = fila.querySelectorAll("td");
+                    if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
+                        encontrado = true;
+                        document.getElementById("codigo").value = celdas[0].textContent;
+                        document.getElementById("nombre").value = celdas[1].textContent;
+                        document.getElementById("propietario").value = celdas[2].textContent;
+                        document.getElementById("edad").value = celdas[3].textContent;
+                        document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
+                        document.getElementById("color").value = celdas[5].textContent;
+                        document.getElementById("especie").value = celdas[6].textContent;
+                        document.getElementById("genero").value = celdas[7].textContent;
+                        document.getElementById("peso").value = celdas[8].textContent;
+                        document.getElementById("raza").value = celdas[9].textContent;
+                    }
+                });
 
-            filas.forEach((fila) => {
-                const celdas = fila.querySelectorAll("td");
-                if (celdas[0].textContent.toLowerCase() === codigoBuscar) { // Convertir a minúsculas
-                    encontrado = true;
-                    document.getElementById("codigo").value = celdas[0].textContent;
-                    document.getElementById("nombre").value = celdas[1].textContent;
-                    document.getElementById("propietario").value = celdas[2].textContent;
-                    document.getElementById("edad").value = celdas[3].textContent;
-                    document.getElementById("fecha_nacimiento").value = celdas[4].textContent;
-                    document.getElementById("color").value = celdas[5].textContent;
-                    document.getElementById("especie").value = celdas[6].textContent;
-                    document.getElementById("genero").value = celdas[7].textContent;
-                    document.getElementById("peso").value = celdas[8].textContent;
-                    document.getElementById("raza").value = celdas[9].textContent;
+                if (!encontrado) {
+                    alert("No se encontró un paciente con ese código.");
                 }
             });
 
-            if (!encontrado) {
-                alert("No se encontró un paciente con ese código.");
-            }
-        });
-
-        
-
-                        // Añade un listener para el botón "Editar"
-            const btnEditar = document.getElementById("editar");
+         // Añadir evento al botón de editar
+         const btnEditar = document.getElementById("editar");
             btnEditar.addEventListener("click", async () => {
-                console.log("Editar botón clickeado"); // Verifica si la función se está ejecutando correctamente
                 const codigoEditar = document.getElementById("codigo").value;
                 const nombre = document.getElementById("nombre").value;
                 const propietario = document.getElementById("propietario").value;
@@ -231,35 +228,26 @@
                 const peso = document.getElementById("peso").value;
                 const raza = document.getElementById("raza").value;
 
-                console.log("Datos del formulario:", {
-                    codigoEditar,
-                    nombre,
-                    propietario,
-                    edad,
-                    fechaNacimiento,
-                    color,
-                    especie,
-                    genero,
-                    peso,
-                    raza
-                });
-
-                // Actualiza los datos del paciente en la base de datos
-                await updateDoc(doc(db, "pacientes", codigoEditar), {
-                    nombre,
-                    propietario,
-                    edad,
-                    fecha_nacimiento: fechaNacimiento,
-                    color,
-                    especie,
-                    genero,
-                    peso,
-                    raza
-                });
-                console.log("Cambios guardados exitosamente.");
-                alert("Cambios guardados exitosamente.");
+                try {
+                    await updateDoc(doc(db, "pacientes", codigoEditar), {
+                        nombre,
+                        propietario,
+                        edad,
+                        fecha_nacimiento: fechaNacimiento,
+                        color,
+                        especie,
+                        genero,
+                        peso,
+                        raza
+                    });
+                    alert("Cambios guardados exitosamente.");
+                } catch (error) {
+                    console.error("Error al editar paciente:", error);
+                    alert("Hubo un error al editar el paciente. Por favor, inténtelo de nuevo.");
+                }
             });
-
+   
+        
             // Mostrar pacientes en la tabla
             onSnapshot(collection(db, "pacientes"), (snapshot) => {
                 const tablaPacientes = document.getElementById("tabla-pacientes");
@@ -281,12 +269,7 @@
                         </tr>
                     `;
                 });
-            });
-    </script>
-
-        
-        
-           
+            });   
 
     </script>
 </body>
