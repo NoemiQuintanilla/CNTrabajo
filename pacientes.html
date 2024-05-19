@@ -201,6 +201,29 @@
             }
         });
 
+         // Mostrar pacientes en la tabla
+        const tablaPacientes = document.getElementById("tabla-pacientes");
+            onSnapshot(collection(db, "pacientes"), (snapshot) => {
+            tablaPacientes.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const paciente = doc.data();
+                tablaPacientes.innerHTML += `
+                    <tr>
+                        <td>${paciente.codigo}</td>
+                        <td>${paciente.nombre}</td>
+                        <td>${paciente.propietario}</td>
+                        <td>${paciente.edad}</td>
+                        <td>${paciente.fecha_nacimiento}</td>
+                        <td>${paciente.color}</td>
+                        <td>${paciente.especie}</td>
+                        <td>${paciente.genero}</td>
+                        <td>${paciente.peso}</td>
+                        <td>${paciente.raza}</td>
+                    </tr>
+                `;
+            });
+        });
+
          // Editar paciente
         const btnsEditar = document.querySelectorAll('editar');
                 btnsEditar.forEach((btn) =>
@@ -242,28 +265,7 @@
                 );
             
         
-            // Mostrar pacientes en la tabla
-        const tablaPacientes = document.getElementById("tabla-pacientes");
-        onSnapshot(collection(db, "pacientes"), (snapshot) => {
-            tablaPacientes.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const paciente = doc.data();
-                tablaPacientes.innerHTML += `
-                    <tr>
-                        <td>${paciente.codigo}</td>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.propietario}</td>
-                        <td>${paciente.edad}</td>
-                        <td>${paciente.fecha_nacimiento}</td>
-                        <td>${paciente.color}</td>
-                        <td>${paciente.especie}</td>
-                        <td>${paciente.genero}</td>
-                        <td>${paciente.peso}</td>
-                        <td>${paciente.raza}</td>
-                    </tr>
-                `;
-            });
-        });
+           
 
     </script>
 </body>
