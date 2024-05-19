@@ -102,7 +102,7 @@
                 </div>
 
         </form>  
-        yupiiii
+        
         <!-- Tabla para mostrar los pacientes -->
     <div class="container">
         <center><h2>Lista de Pacientes</h2></center>
@@ -154,6 +154,14 @@
         const veterinaria = document.getElementById("form-veterinaria");
         veterinaria.addEventListener("submit",async(e)=>{
             e.preventDefault();
+            const codigo = veterinariaForm.codigo.value;
+        
+            // Verificar si el código ya existe
+            const codigoExistente = await verificarCodigoExistente(codigo);
+            if (codigoExistente) {
+                alert("El código ya existe. Por favor, ingrese un código único.");
+                return;
+            }
             await addDoc(collection(db,"pacientes"),{
                 codigo: veterinaria.codigo.value,
                 color: veterinaria.color.value,
@@ -168,8 +176,18 @@
             });
             veterinaria.reset();
         });
+
+        
+            // Verificar si el código ya existe en la base de datos
+            async function verificarCodigoExistente(codigo) {
+                const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty;
+            }
+
+
            // Mostrar pacientes en la tabla
-           const tablaPacientes = document.getElementById("tabla-pacientes");
+        const tablaPacientes = document.getElementById("tabla-pacientes");
         onSnapshot(collection(db, "pacientes"), (snapshot) => {
             tablaPacientes.innerHTML = "";
             snapshot.forEach((doc) => {
