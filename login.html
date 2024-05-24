@@ -19,25 +19,59 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <label for=""><h3><b>Usuario</b></h3></label>
-                        <input type="text" id="usuario"  >
+                        <button type="submit" class="btn btn-success" id="btn-login">Login with Facebook</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label for=""><h3><b>Contraseña</b></h3></label>
-                        <input type="text" id="contraseña" >
+                        <button type="submit" class="btn btn-danger" id="btn-google"><img src="imagenes/google.png" alt="">&nbsp; &nbsp; Login with Google</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success" id="btn-login">Iniciar sesion</button>
-                    </div>
-                </div>
-    
     
             </div>
         </form>
     </center>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+       
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
+          authDomain: "veterinaria-144cf.firebaseapp.com",
+          projectId: "veterinaria-144cf",
+          storageBucket: "veterinaria-144cf.appspot.com",
+          messagingSenderId: "895686591577",
+          appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Initialize Google Auth provider
+        const provider = new GoogleAuthProvider();
+
+        // Get the login button
+        const loginButton = document.getElementById('btn-google');
+
+        // Add click event to login button
+        loginButton.addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // User successfully signed in
+                    const user = result.user;
+                    console.log('Usuario Ingresado:', user);
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('Error durante la autenticacion:', error);
+                });
+        });
+      </script>
 </body>
 </html>
