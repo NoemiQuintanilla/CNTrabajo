@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="estilo.css">
     <title>Login</title>
 </head>
@@ -15,23 +15,28 @@
         <br>
         <br>
         <h1>INICIAR SESION</h1>
-        <form id="login-form">
+        <form id="loginForm">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="username">Usuario:</label><br>
-                        <input type="text" id="username" name="username"><br>
-                        <label for="password">Contraseña:</label><br>
-                        <input type="password" id="password" name="password"><br><br>
-                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        <input type="text" id="username" class="form-control" placeholder="Nombre de usuario" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-danger" id="btn-google"><img src="imagenes/google.png" alt="">&nbsp; &nbsp; Login with Google</button>
+                        <input type="password" id="password" class="form-control" placeholder="Contraseña" required>
                     </div>
                 </div>
-    
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-danger" id="btn-google"><img src="imagenes/google.png" alt="">&nbsp; &nbsp; Iniciar sesión con Google</button>
+                    </div>
+                </div>
             </div>
         </form>
     </center>
@@ -42,12 +47,12 @@
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAv2YFuqtaX6AcoRE7t15WtLGjnjIoi400",
-            authDomain: "veterinaria-144cf.firebaseapp.com",
-            projectId: "veterinaria-144cf",
-            storageBucket: "veterinaria-144cf.appspot.com",
-            messagingSenderId: "895686591577",
-            appId: "1:895686591577:web:d0c78bb26bd16526e61d48"
+            apiKey: "TuApiKey",
+            authDomain: "TuDominio.firebaseapp.com",
+            projectId: "TuProyecto",
+            storageBucket: "TuBucket.appspot.com",
+            messagingSenderId: "TuSenderId",
+            appId: "TuAppId"
         };
 
         // Initialize Firebase
@@ -57,41 +62,50 @@
         // Initialize Google Auth provider
         const provider = new GoogleAuthProvider();
 
-        // Evento de envío del formulario de inicio de sesión
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Evitar recargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the login button
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
 
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            // Add submit event to login form
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                
+                signInWithEmailAndPassword(auth, `${username}@example.com`, password)
+                    .then((userCredential) => {
+                        // User successfully signed in
+                        const user = userCredential.user;
+                        console.log('Usuario ingresado:', user);
+                    })
+                    .catch((error) => {
+                        // Handle errors here
+                        console.error('Error durante la autenticación:', error);
+                        alert(`Error: ${error.message}`);
+                    });
+            });
 
-            // Iniciar sesión con usuario y contraseña
-            signInWithEmailAndPassword(auth, username + "@example.com", password)
-                .then((userCredential) => {
-                    // Usuario autenticado con éxito
-                    const user = userCredential.user;
-                    console.log("Usuario autenticado:", user);
-                })
-                .catch((error) => {
-                    // Manejar errores
-                    console.error("Error al iniciar sesión:", error.message);
-                });
+            // Get the login with Google button
+            const loginButton = document.getElementById('btn-google');
+
+            // Add click event to login with Google button
+            loginButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        // User successfully signed in with Google
+                        const user = result.user;
+                        console.log('Usuario ingresado con Google:', user);
+                    })
+                    .catch((error) => {
+                        // Handle errors here
+                        console.error('Error durante la autenticación con Google:', error);
+                        alert(`Error: ${error.message}`);
+                    });
+            });
         });
-
-        // Evento del botón de inicio de sesión con Google
-        document.getElementById("btn-google").addEventListener("click", function() {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    // Usuario autenticado con éxito
-                    const user = result.user;
-                    console.log("Usuario autenticado con Google:", user);
-                })
-                .catch((error) => {
-                    // Manejar errores
-                    console.error("Error al iniciar sesión con Google:", error.message);
-                });
-        });
-
-        
     </script>
 </body>
 </html>
