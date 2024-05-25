@@ -4,75 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="estilo.css">
     <title>Login</title>
 </head>
 <body>
     <center>
-        <br><br><br><br>
+        <br>
+        <br>
+        <br>
+        <br>
         <h1>INICIAR SESION</h1>
         <form id="login-form">
             <div class="container">
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-md-12">
-                        <input type="email" id="login-email" class="form-control" placeholder="Correo electrónico" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <input type="password" id="login-password" class="form-control" placeholder="Contraseña" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
+                        <label for="username">Usuario:</label><br>
+                        <input type="text" id="username" name="username"><br>
+                        <label for="password">Contraseña:</label><br>
+                        <input type="password" id="password" name="password"><br><br>
                         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
                     </div>
                 </div>
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-danger" id="btn-google"><img src="imagenes/google.png" alt="">&nbsp; &nbsp; Login with Google</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>¿No tienes cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        <form id="register-form" style="display: none;">
-            <div class="container">
-                <h1>REGISTRARSE</h1>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <input type="email" id="register-email" class="form-control" placeholder="Correo electrónico" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <input type="password" id="register-password" class="form-control" placeholder="Contraseña" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary">Registrarse</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>¿Ya tienes cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
-                    </div>
-                </div>
+    
             </div>
         </form>
     </center>
-
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -91,80 +57,41 @@
         // Initialize Google Auth provider
         const provider = new GoogleAuthProvider();
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Toggle between login and register forms
-            const showRegisterLink = document.getElementById('show-register');
-            const showLoginLink = document.getElementById('show-login');
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
+        // Evento de envío del formulario de inicio de sesión
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evitar recargar la página
 
-            showRegisterLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            });
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-            showLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                registerForm.style.display = 'none';
-                loginForm.style.display = 'block';
-            });
-
-            // Login with email and password
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // User signed in
-                        const user = userCredential.user;
-                        console.log('Usuario ingresado:', user);
-                    })
-                    .catch((error) => {
-                        // Handle errors here
-                        console.error('Error durante la autenticación:', error);
-                        alert(`Error: ${error.message}`);
-                    });
-            });
-
-            // Register with email and password
-            registerForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // User registered
-                        const user = userCredential.user;
-                        console.log('Usuario registrado:', user);
-                    })
-                    .catch((error) => {
-                        // Handle errors here
-                        console.error('Error durante el registro:', error);
-                        alert(`Error: ${error.message}`);
-                    });
-            });
-
-            // Google sign-in
-            const loginButton = document.getElementById('btn-google');
-            loginButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                signInWithPopup(auth, provider)
-                    .then((result) => {
-                        // User successfully signed in
-                        const user = result.user;
-                        console.log('Usuario ingresado:', user);
-                    })
-                    .catch((error) => {
-                        // Handle errors here
-                        console.error('Error durante la autenticación:', error);
-                        alert(`Error: ${error.message}`);
-                    });
-            });
+            // Iniciar sesión con usuario y contraseña
+            signInWithEmailAndPassword(auth, username + "@example.com", password)
+                .then((userCredential) => {
+                    // Usuario autenticado con éxito
+                    const user = userCredential.user;
+                    console.log("Usuario autenticado:", user);
+                })
+                .catch((error) => {
+                    // Manejar errores
+                    console.error("Error al iniciar sesión:", error.message);
+                });
         });
+
+        // Evento del botón de inicio de sesión con Google
+        document.getElementById("btn-google").addEventListener("click", function() {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // Usuario autenticado con éxito
+                    const user = result.user;
+                    console.log("Usuario autenticado con Google:", user);
+                })
+                .catch((error) => {
+                    // Manejar errores
+                    console.error("Error al iniciar sesión con Google:", error.message);
+                });
+        });
+
+        
     </script>
 </body>
 </html>
