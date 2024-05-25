@@ -122,6 +122,10 @@
             const registerButton = document.getElementById('btn-register');
             const googleButton = document.getElementById('btn-google');
 
+            const redirectToPacientes = () => {
+                window.location.href = 'pacientes.html';
+            };
+
             // Login functionality
             loginButton.addEventListener('click', (e) => {
                 e.preventDefault();
