@@ -17,7 +17,7 @@
             &nbsp; &nbsp; &nbsp; &nbsp;
             <img src="imagenes/utc.png" alt="" class="logo">
             &nbsp; &nbsp; &nbsp; &nbsp;
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">Iniciar sesión / Registrarseeee</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">Iniciar sesión / Registrarse</button>
         
             <!-- Modal -->
             <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
@@ -134,6 +134,8 @@
                     .then((userCredential) => {
                         const user = userCredential.user;
                         console.log('Usuario ingresado:', user);
+                        // Redirigir a pacientes.html
+                        window.location.href = 'pacientes.html';
                     })
                     .catch((error) => {
                         console.error('Error durante la autenticación:', error);
@@ -151,6 +153,7 @@
                     .then((userCredential) => {
                         const user = userCredential.user;
                         console.log('Usuario registrado:', user);
+                        
                     })
                     .catch((error) => {
                         console.error('Error durante el registro:', error);
@@ -165,6 +168,8 @@
                     .then((result) => {
                         const user = result.user;
                         console.log('Usuario ingresado con Google:', user);
+                        // Redirigir a pacientes.html
+                        window.location.href = 'pacientes.html';
                     })
                     .catch((error) => {
                         console.error('Error durante la autenticación con Google:', error);
