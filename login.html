@@ -14,22 +14,25 @@
         <br>
         <br>
         <br>
-        <h1>INICIAR SESIONnn</h1>
-        <form id="loginForm">
+        <h1>INICIAR SESIÓN / REGISTRARSE</h1>
+        <form id="authForm">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <input type="text" id="username" class="form-control" placeholder="Nombre de usuario" required>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-md-12">
                         <input type="password" id="password" class="form-control" placeholder="Contraseña" required>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary" id="btn-login">Iniciar sesión</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-secondary" id="btn-register">Registrarse</button>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -43,7 +46,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -63,44 +66,56 @@
         const provider = new GoogleAuthProvider();
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Get the login button
-            const loginForm = document.getElementById('loginForm');
+            const authForm = document.getElementById('authForm');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
+            const loginButton = document.getElementById('btn-login');
+            const registerButton = document.getElementById('btn-register');
+            const googleButton = document.getElementById('btn-google');
 
-            // Add submit event to login form
-            loginForm.addEventListener('submit', (e) => {
+            // Login functionality
+            loginButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 const username = usernameInput.value;
                 const password = passwordInput.value;
-                
+
                 signInWithEmailAndPassword(auth, `${username}@example.com`, password)
                     .then((userCredential) => {
-                        // User successfully signed in
                         const user = userCredential.user;
                         console.log('Usuario ingresado:', user);
                     })
                     .catch((error) => {
-                        // Handle errors here
                         console.error('Error durante la autenticación:', error);
                         alert(`Error: ${error.message}`);
                     });
             });
 
-            // Get the login with Google button
-            const loginButton = document.getElementById('btn-google');
+            // Registration functionality
+            registerButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
 
-            // Add click event to login with Google button
-            loginButton.addEventListener('click', (e) => {
+                createUserWithEmailAndPassword(auth, `${username}@example.com`, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log('Usuario registrado:', user);
+                    })
+                    .catch((error) => {
+                        console.error('Error durante el registro:', error);
+                        alert(`Error: ${error.message}`);
+                    });
+            });
+
+            // Google login functionality
+            googleButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 signInWithPopup(auth, provider)
                     .then((result) => {
-                        // User successfully signed in with Google
                         const user = result.user;
                         console.log('Usuario ingresado con Google:', user);
                     })
                     .catch((error) => {
-                        // Handle errors here
                         console.error('Error durante la autenticación con Google:', error);
                         alert(`Error: ${error.message}`);
                     });
