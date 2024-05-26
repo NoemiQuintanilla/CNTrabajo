@@ -23,7 +23,7 @@ body {
 }
 
 .titulo {
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-family: cursive;
     
 }
@@ -46,16 +46,15 @@ body {
 }
 
 footer {
-    background-color: beige;
     font-family: cursive;
-    color: black;
+    color: rgb(255, 255, 255);
     padding: 10px;
 }
 
 .txt1 {
     font-family: cursive;
     font-size: 30px;
-    color: black;
+    color: rgb(255, 255, 255);
 
 }
 
@@ -67,7 +66,7 @@ footer {
 .txt3 {
     font-family: cursive;
     font-size: 30px;
-    color: black;
+    color: rgb(255, 255, 255);
 
 }
 
