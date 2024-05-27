@@ -177,171 +177,129 @@
       
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("form-veterinaria");
+            const listaPacientes = document.getElementById("lista-pacientes");
 
-        const veterinaria = document.getElementById("form-veterinaria");
-        veterinaria.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const codigo = veterinaria.codigo.value;
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                
+                const paciente = {
+                    codigo: document.getElementById("codigo").value,
+                    nombre: document.getElementById("nombre").value,
+                    propietario: document.getElementById("propietario").value,
+                    edad: document.getElementById("edad").value,
+                    fecha_nacimiento: document.getElementById("fecha_nacimiento").value,
+                    color: document.getElementById("color").value,
+                    especie: document.getElementById("especie").value,
+                    genero: document.getElementById("genero").value,
+                    peso: document.getElementById("peso").value,
+                    raza: document.getElementById("raza").value
+                };
 
-            const codigoExistente = await verificarCodigoExistente(codigo);
-            if (codigoExistente) {
-                alert("El código ya existe. Por favor, ingrese un código único.");
-                return;
-            }
-
-            await addDoc(collection(db, "pacientes"), {
-                codigo: veterinaria.codigo.value,
-                color: veterinaria.color.value,
-                edad: veterinaria.edad.value,
-                especie: veterinaria.especie.value,
-                fecha_nacimiento: veterinaria.fecha_nacimiento.value,
-                genero: veterinaria.genero.value,
-                nombre: veterinaria.nombre.value,
-                peso: veterinaria.peso.value,
-                propietario: veterinaria.propietario.value,
-                raza: veterinaria.raza.value
-            });
-            veterinaria.reset();
-        });
-
-        async function verificarCodigoExistente(codigo) {
-            const q = query(collection(db, "pacientes"), where("codigo", "==", codigo));
-            const querySnapshot = await getDocs(q);
-            return !querySnapshot.empty;
-        }
-
-        const listaPacientes = document.getElementById("lista-pacientes");
-        onSnapshot(collection(db, "pacientes"), (snapshot) => {
-            listaPacientes.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const paciente = doc.data();
-                listaPacientes.innerHTML += `
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">${paciente.nombre}</h5>
-                                <p class="card-text"><b>Código:</b> ${paciente.codigo}</p>
-                                <p class="card-text"><b>Propietario:</b> ${paciente.propietario}</p>
-                                <p class="card-text"><b>Edad:</b> ${paciente.edad}</p>
-                                <p class="card-text"><b>Fecha de Nacimiento:</b> ${paciente.fecha_nacimiento}</p>
-                                <p class="card-text"><b>Color:</b> ${paciente.color}</p>
-                                <p class="card-text"><b>Especie:</b> ${paciente.especie}</p>
-                                <p class="card-text"><b>Género:</b> ${paciente.genero}</p>
-                                <p class="card-text"><b>Peso:</b> ${paciente.peso}</p>
-                                <p class="card-text"><b>Raza:</b> ${paciente.raza}</p>
-                                <button class="btn btn-warning btn-edit" data-id="${doc.id}">Editar</button>
-                                <button class="btn btn-danger btn-delete" data-id="${doc.id}">Eliminar</button>
-                            </div>
+                const tarjetaPaciente = document.createElement("div");
+                tarjetaPaciente.className = "col-md-4";
+                tarjetaPaciente.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${paciente.nombre}</h5>
+                            <p class="card-text"><b>Codigo:</b> ${paciente.codigo}</p>
+                            <p class="card-text"><b>Propietario:</b> ${paciente.propietario}</p>
+                            <p class="card-text"><b>Edad:</b> ${paciente.edad}</p>
+                            <p class="card-text"><b>Fecha de Nacimiento:</b> ${paciente.fecha_nacimiento}</p>
+                            <p class="card-text"><b>Color:</b> ${paciente.color}</p>
+                            <p class="card-text"><b>Especie:</b> ${paciente.especie}</p>
+                            <p class="card-text"><b>Género:</b> ${paciente.genero}</p>
+                            <p class="card-text"><b>Peso:</b> ${paciente.peso}</p>
+                            <p class="card-text"><b>Raza:</b> ${paciente.raza}</p>
+                            <button class="btn btn-primary" onclick="openEditModal('${paciente.codigo}')">Editar</button>
                         </div>
                     </div>
                 `;
+                
+                listaPacientes.appendChild(tarjetaPaciente);
+                form.reset();
             });
 
-            const editButtons = document.querySelectorAll(".btn-edit");
-            editButtons.forEach(button => {
-                button.addEventListener("click", (e) => {
-                    const id = e.target.dataset.id;
-                    openEditModal(id);
-                });
+            document.getElementById("btn-buscar").addEventListener("click", function() {
+                const codigo = document.getElementById("buscar").value;
+                const tarjetas = listaPacientes.getElementsByClassName("card");
+                let encontrado = false;
+                
+                for (const tarjeta of tarjetas) {
+                    if (tarjeta.innerText.includes(codigo)) {
+                        tarjeta.style.display = "block";
+                        encontrado = true;
+                    } else {
+                        tarjeta.style.display = "none";
+                    }
+                }
+
+                if (!encontrado) {
+                    alert("No se encontró ningún paciente con ese código.");
+                }
             });
 
-            const deleteButtons = document.querySelectorAll(".btn-delete");
-            deleteButtons.forEach(button => {
-                button.addEventListener("click", async (e) => {
-                    const id = e.target.dataset.id;
-                    await deleteDoc(doc(db, "pacientes", id));
-                });
+            document.getElementById("btn-limpiar").addEventListener("click", function() {
+                const tarjetas = listaPacientes.getElementsByClassName("card");
+                for (const tarjeta of tarjetas) {
+                    tarjeta.style.display = "block";
+                }
+                document.getElementById("buscar").value = "";
             });
         });
 
-        function openEditModal(id) {
-            const docRef = doc(db, "pacientes", id);
-            getDoc(docRef).then((docSnap) => {
-                if (docSnap.exists()) {
-                    const paciente = docSnap.data();
-                    document.getElementById("editCodigo").value = paciente.codigo;
-                    document.getElementById("editNombre").value = paciente.nombre;
-                    document.getElementById("editPropietario").value = paciente.propietario;
-                    document.getElementById("editEdad").value = paciente.edad;
-                    document.getElementById("editFechaNacimiento").value = paciente.fecha_nacimiento;
-                    document.getElementById("editColor").value = paciente.color;
-                    document.getElementById("editEspecie").value = paciente.especie;
-                    document.getElementById("editGenero").value = paciente.genero;
-                    document.getElementById("editPeso").value = paciente.peso;
-                    document.getElementById("editRaza").value = paciente.raza;
+        function openEditModal(codigo) {
+            const tarjetas = document.getElementsByClassName("card");
 
-                    const formEditar = document.getElementById("form-editar");
-                    formEditar.onsubmit = async (e) => {
-                        e.preventDefault();
-                        await updateDoc(docRef, {
-                            nombre: document.getElementById("editNombre").value,
-                            propietario: document.getElementById("editPropietario").value,
-                            edad: document.getElementById("editEdad").value,
-                            fecha_nacimiento: document.getElementById("editFechaNacimiento").value,
-                            color: document.getElementById("editColor").value,
-                            especie: document.getElementById("editEspecie").value,
-                            genero: document.getElementById("editGenero").value,
-                            peso: document.getElementById("editPeso").value,
-                            raza: document.getElementById("editRaza").value
-                        });
-                        const modal = bootstrap.Modal.getInstance(document.getElementById("modalEditar"));
-                        modal.hide();
-                    };
+            for (const tarjeta of tarjetas) {
+                if (tarjeta.innerText.includes(codigo)) {
+                    const nombre = tarjeta.querySelector(".card-title").innerText;
+                    const propietario = tarjeta.querySelector(".card-text:nth-child(3)").innerText.split(": ")[1];
+                    const edad = tarjeta.querySelector(".card-text:nth-child(4)").innerText.split(": ")[1];
+                    const fecha_nacimiento = tarjeta.querySelector(".card-text:nth-child(5)").innerText.split(": ")[1];
+                    const color = tarjeta.querySelector(".card-text:nth-child(6)").innerText.split(": ")[1];
+                    const especie = tarjeta.querySelector(".card-text:nth-child(7)").innerText.split(": ")[1];
+                    const genero = tarjeta.querySelector(".card-text:nth-child(8)").innerText.split(": ")[1];
+                    const peso = tarjeta.querySelector(".card-text:nth-child(9)").innerText.split(": ")[1];
+                    const raza = tarjeta.querySelector(".card-text:nth-child(10)").innerText.split(": ")[1];
+
+                    document.getElementById("editCodigo").value = codigo;
+                    document.getElementById("editNombre").value = nombre;
+                    document.getElementById("editPropietario").value = propietario;
+                    document.getElementById("editEdad").value = edad;
+                    document.getElementById("editFechaNacimiento").value = fecha_nacimiento;
+                    document.getElementById("editColor").value = color;
+                    document.getElementById("editEspecie").value = especie;
+                    document.getElementById("editGenero").value = genero;
+                    document.getElementById("editPeso").value = peso;
+                    document.getElementById("editRaza").value = raza;
 
                     const modal = new bootstrap.Modal(document.getElementById("modalEditar"));
                     modal.show();
-                }
-            });
-        }
 
-        const btnBuscar = document.getElementById("btn-buscar");
-        btnBuscar.addEventListener("click", () => {
-            const codigo = document.getElementById("buscar").value;
-            const listaPacientes = document.getElementById("lista-pacientes");
-            const cards = listaPacientes.getElementsByClassName("card");
-            let pacienteEncontrado = false;
+                    const formEditar = document.getElementById("form-editar");
+                    formEditar.onsubmit = function(e) {
+                        e.preventDefault();
+                        
+                        tarjeta.querySelector(".card-title").innerText = document.getElementById("editNombre").value;
+                        tarjeta.querySelector(".card-text:nth-child(3)").innerText = `Propietario: ${document.getElementById("editPropietario").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(4)").innerText = `Edad: ${document.getElementById("editEdad").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(5)").innerText = `Fecha de Nacimiento: ${document.getElementById("editFechaNacimiento").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(6)").innerText = `Color: ${document.getElementById("editColor").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(7)").innerText = `Especie: ${document.getElementById("editEspecie").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(8)").innerText = `Género: ${document.getElementById("editGenero").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(9)").innerText = `Peso: ${document.getElementById("editPeso").value}`;
+                        tarjeta.querySelector(".card-text:nth-child(10)").innerText = `Raza: ${document.getElementById("editRaza").value}`;
+                        
+                        modal.hide();
+                    };
 
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                const codigoPaciente = card.querySelector(".card-text b:nth-child(2)").nextSibling.nodeValue.trim();
-
-                if (codigoPaciente === codigo) {
-                    const nombre = card.querySelector(".card-title").innerText;
-                    const propietario = card.querySelector(".card-text b:nth-child(4)").nextSibling.nodeValue.trim();
-                    const edad = card.querySelector(".card-text b:nth-child(6)").nextSibling.nodeValue.trim();
-                    const fechaNacimiento = card.querySelector(".card-text b:nth-child(8)").nextSibling.nodeValue.trim();
-                    const color = card.querySelector(".card-text b:nth-child(10)").nextSibling.nodeValue.trim();
-                    const especie = card.querySelector(".card-text b:nth-child(12)").nextSibling.nodeValue.trim();
-                    const genero = card.querySelector(".card-text b:nth-child(14)").nextSibling.nodeValue.trim();
-                    const peso = card.querySelector(".card-text b:nth-child(16)").nextSibling.nodeValue.trim();
-                    const raza = card.querySelector(".card-text b:nth-child(18)").nextSibling.nodeValue.trim();
-
-                    document.getElementById("codigo").value = codigoPaciente;
-                    document.getElementById("nombre").value = nombre;
-                    document.getElementById("propietario").value = propietario;
-                    document.getElementById("edad").value = edad;
-                    document.getElementById("fecha_nacimiento").value = fechaNacimiento;
-                    document.getElementById("color").value = color;
-                    document.getElementById("especie").value = especie;
-                    document.getElementById("genero").value = genero;
-                    document.getElementById("peso").value = peso;
-                    document.getElementById("raza").value = raza;
-
-                    pacienteEncontrado = true;
                     break;
                 }
             }
-
-            if (!pacienteEncontrado) {
-                alert("No se encontró ningún paciente con ese código.");
-            }
-        });
-
-        const btnLimpiar = document.getElementById("btn-limpiar");
-        btnLimpiar.addEventListener("click", () => {
-            veterinaria.reset();
-            document.getElementById("buscar").value = "";
-        });
+        }
+        
     </script>
 </body>
 </html>
